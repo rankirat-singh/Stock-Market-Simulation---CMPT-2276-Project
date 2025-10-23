@@ -1,0 +1,215 @@
+[gd_scene load_steps=2 format=3 uid="uid://t33xx3viqu2q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ia5b"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[node name="MainScene" type="Node2D"]
+
+[node name="GameWindow" type="CanvasLayer" parent="."]
+
+[node name="TabContainer" type="TabContainer" parent="GameWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -17.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.0117791, 1.0094213)
+current_tab = 0
+
+[node name="Stock View" type="VBoxContainer" parent="GameWindow/TabContainer"]
+layout_mode = 2
+alignment = 1
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 665
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
+layout_mode = 2
+
+[node name="StockName" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Apple"
+
+[node name="StockCode" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "AAPL"
+
+[node name="StockPrice" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 50
+text = "258.54USD"
+
+[node name="GraphContainer" type="PanelContainer" parent="GameWindow/TabContainer/Stock View"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.23529412, 0.23529412, 0.23529412, 1)
+text = "
+1000
+
+800
+
+600
+
+500
+
+400
+
+200
+
+100
+
+0"
+horizontal_alignment = 2
+
+[node name="X-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(75, 405)
+points = PackedVector2Array(0, 0, 1050, 0)
+width = 2.0
+default_color = Color(0.23529412, 0.23529412, 0.23529412, 1)
+
+[node name="Y-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(75, 25)
+points = PackedVector2Array(0, 0, 0, 380)
+width = 2.0
+default_color = Color(0.23392558, 0.2339254, 0.23392552, 1)
+
+[node name="Q1Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(281.25, 405)
+points = PackedVector2Array(0, -102, 0, -10)
+width = 5.0
+default_color = Color(0, 0.8, 0, 1)
+
+[node name="Q1Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(281.25, 405)
+points = PackedVector2Array(0, -90, 0, -30)
+width = 50.0
+default_color = Color(0, 0.8, 0, 1)
+
+[node name="Q2Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(537.5, 405)
+points = PackedVector2Array(0, -135, 0, -60)
+width = 5.0
+default_color = Color(0, 0.8, 0, 1)
+
+[node name="Q2Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(537.5, 405)
+points = PackedVector2Array(0, -120, 0, -90)
+width = 50.0
+default_color = Color(0, 0.8, 0, 1)
+
+[node name="Q3Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(793.75, 405)
+points = PackedVector2Array(0, -150, 0, -50)
+width = 5.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="Q3Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(793.75, 405)
+points = PackedVector2Array(0, -120, 0, -95)
+width = 50.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="Q4Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(1050, 405)
+points = PackedVector2Array(0, -190, 0, -75)
+width = 5.0
+default_color = Color(0, 0.8, 0, 1)
+
+[node name="Q4Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+position = Vector2(1050, 405)
+points = PackedVector2Array(0, -95, 0, -170)
+width = 50.0
+default_color = Color(0, 0.8, 0, 1)
+
+[node name="ButtonContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="BuyButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 35
+text = "Buy"
+
+[node name="SellButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 35
+text = "Sell"
+
+[node name="HoldButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 35
+text = "Hold"
+
+[node name="Portfolio View" type="PanelContainer" parent="GameWindow/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2ia5b")
+metadata/_tab_index = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Portfolio View"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Username" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "User
+"
+
+[node name="CashHoldingsLabel" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Cash Holdings:"
+
+[node name="CashHoldingsValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "0.0 USD"
+
+[node name="StockHoldingsLabel" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Stock Holdings:"
+
+[node name="StockHoldingsValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "AAPL 0.0 USD"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer"]
+layout_mode = 2
+
+[node name="PortfolioValueLabel" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Total Portfolio Value:"
+
+[node name="PortfolioValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "0.0 USD"
+horizontal_alignment = 1
