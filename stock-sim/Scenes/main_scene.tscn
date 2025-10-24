@@ -37,10 +37,8 @@ rotation = 0.0
 scale = Vector2(1, 1)
 skew = 0.0
 script = ExtResource("1_52fb6")
-test_int = 5
-test_float = 5.2
-test_bool = true
-test_vector = Vector3(1, 2, 3)
+current_quarter = 0
+max_quarters = 4
 
 [node name="GameWindow" type="CanvasLayer" parent="."]
 
@@ -247,3 +245,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 45
 text = "0.0 USD"
 horizontal_alignment = 1
+
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButton" to="." method="buy_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/SellButton" to="." method="sell_stock"]

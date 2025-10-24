@@ -1,9 +1,4 @@
-from py4godot.methods import private
-from py4godot.signals import signal, SignalArg
-from py4godot.classes import gdclass
-from py4godot.classes.Node import Node
 
-@gdclass
 class Stock:
 	"""Represent a single stock in the trading simulator
 	
