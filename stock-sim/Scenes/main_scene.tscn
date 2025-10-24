@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://t33xx3viqu2q"]
+[gd_scene load_steps=3 format=3 uid="uid://t33xx3viqu2q"]
+
+[ext_resource type="Script" path="res://scripts/Game_manager.py" id="1_52fb6"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ia5b"]
 content_margin_left = 10.0
@@ -7,6 +9,38 @@ content_margin_right = 10.0
 content_margin_bottom = 10.0
 
 [node name="MainScene" type="Node2D"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+visible = true
+modulate = Color(1, 1, 1, 1)
+self_modulate = Color(1, 1, 1, 1)
+show_behind_parent = false
+top_level = false
+clip_children = 0
+light_mask = 1
+visibility_layer = 1
+z_index = 0
+z_as_relative = true
+y_sort_enabled = false
+texture_filter = 0
+texture_repeat = 0
+use_parent_material = false
+position = Vector2(0, 0)
+rotation = 0.0
+scale = Vector2(1, 1)
+skew = 0.0
+script = ExtResource("1_52fb6")
+test_int = 5
+test_float = 5.2
+test_bool = true
+test_vector = Vector3(1, 2, 3)
 
 [node name="GameWindow" type="CanvasLayer" parent="."]
 

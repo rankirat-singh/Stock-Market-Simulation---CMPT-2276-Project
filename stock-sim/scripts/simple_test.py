@@ -3,11 +3,11 @@ from Portfolio import Portfolio
 
 print("Creating a stock...")
 apple = Stock(
-    name="Apple Inc.",
-    ticker="AAPL",
-    price_history=[150, 160, 155, 170],
-    news_history=["Strong sales", "Revenue up", "Minor dip", "Record quarter"],
-    sentiment_history=["Positive", "Positive", "Neutral", "Very Positive"]
+	name="Apple Inc.",
+	ticker="AAPL",
+	price_history=[150, 160, 155, 170],
+	news_history=["Strong sales", "Revenue up", "Minor dip", "Record quarter"],
+	sentiment_history=["Positive", "Positive", "Neutral", "Very Positive"]
 )
 
 print(f"Stock: {apple.name} ({apple.ticker})")
@@ -26,13 +26,13 @@ print(f"Starting cash: ${portfolio.cash}")
 
 print("\nBuying 1 share of AAPL...")
 if portfolio.buy_stock(apple, 1):
-    print("✓ Success!")
-    print(f"Cash: ${portfolio.cash}")
-    print(f"Holdings: {portfolio.holdings}")
+	print("✓ Success!")
+	print(f"Cash: ${portfolio.cash}")
+	print(f"Holdings: {portfolio.holdings}")
 else:
-    print("✗ Failed")
+	print("✗ Failed")
 
 stocks_dict = {'AAPL': apple}
 print(f"\nPortfolio value: ${portfolio.get_total_value(stocks_dict)}")
 
-print("\n✅ All tests passed!")
+print("\n✅ All tests
