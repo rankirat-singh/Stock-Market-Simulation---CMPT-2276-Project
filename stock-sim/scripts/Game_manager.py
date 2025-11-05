@@ -33,11 +33,19 @@ class Game_manager(Node):
 		self.stocks = {}
 		self._initialize_stocks()
 		
+		# Initialize managers
+		self.tutorial_manager = None
+		self.ui_manager = None
+		self.pending_action = None  # Store pending buy/sell action
+		
 		print(f"Game initialized: Quarter {self.current_quarter + 1}/{self.max_quarters}")
 		print(f"Starting cash: ${self.portfolio.cash}")
 		
 		# Update UI with initial values
 		self.call_deferred("_update_ui")
+		
+		# Show welcome tutorial
+		self.call_deferred("show_welcome_tutorial")
 	
 	def _process(self, delta: float) -> None:
 		pass  # Game is turn-based, no continuous updates needed
@@ -88,39 +96,67 @@ class Game_manager(Node):
 		)
 	
 	# Public methods for UI to call
-	def buy_stock(self, ticker: str = "AAPL") -> bool:
-		"""Buy 1 share of the specified stock"""
+	def buy_stock(self, ticker: str = "AAPL", shares: int = 1) -> bool:
+		"""Buy specified number of shares of the stock"""
 		if ticker not in self.stocks:
 			print(f"Error: Stock {ticker} not found")
 			return False
 		
+		if shares <= 0:
+			print(f"Error: Invalid share quantity {shares}")
+			return False
+		
 		stock = self.stocks[ticker]
-		success = self.portfolio.buy_stock(stock, 1)
+		total_cost = stock.get_current_price() * shares
 		
-		if success:
-			print(f"Bought 1 share of {ticker} at ${stock.get_current_price()}")
+		if not self.portfolio.can_afford(total_cost):
+			print(f"Not enough cash to buy {shares} shares of {ticker} (need ${total_cost:.2f}, have ${self.portfolio.cash:.2f})")
+			return False
+		
+		# Buy shares one at a time
+		success_count = 0
+		for i in range(shares):
+			if self.portfolio.buy_stock(stock, 1):
+				success_count += 1
+			else:
+				break
+		
+		if success_count > 0:
+			print(f"Bought {success_count} share(s) of {ticker} at ${stock.get_current_price():.2f} each")
 			self._update_ui()
-		else:
-			print(f"Not enough cash to buy {ticker}")
 		
-		return success
+		return success_count == shares
 	
-	def sell_stock(self, ticker: str = "AAPL") -> bool:
-		"""Sell 1 share of the specified stock"""
+	def sell_stock(self, ticker: str = "AAPL", shares: int = 1) -> bool:
+		"""Sell specified number of shares of the stock"""
 		if ticker not in self.stocks:
 			print(f"Error: Stock {ticker} not found")
 			return False
 		
+		if shares <= 0:
+			print(f"Error: Invalid share quantity {shares}")
+			return False
+		
+		owned_shares = self.portfolio.get_shares_owned(ticker)
+		if owned_shares < shares:
+			print(f"You don't own enough shares of {ticker} (have {owned_shares}, trying to sell {shares})")
+			return False
+		
 		stock = self.stocks[ticker]
-		success = self.portfolio.sell_stock(stock, 1)
 		
-		if success:
-			print(f"Sold 1 share of {ticker} at ${stock.get_current_price()}")
+		# Sell shares one at a time
+		success_count = 0
+		for i in range(shares):
+			if self.portfolio.sell_stock(stock, 1):
+				success_count += 1
+			else:
+				break
+		
+		if success_count > 0:
+			print(f"Sold {success_count} share(s) of {ticker} at ${stock.get_current_price():.2f} each")
 			self._update_ui()
-		else:
-			print(f"You don't own any shares of {ticker}")
 		
-		return success
+		return success_count == shares
 	
 	def hold_stock(self, ticker: str = "AAPL"):
 		"""Hold position (do nothing)"""
@@ -165,8 +201,40 @@ class Game_manager(Node):
 		self.portfolio.reset()
 		for stock in self.stocks.values():
 			stock.reset()
+		if self.tutorial_manager:
+			self.tutorial_manager.reset_tutorials()
 		print("Game reset!")
 		self._update_ui()
+	
+	def show_welcome_tutorial(self):
+		"""Show welcome tutorial on game start"""
+		if self.tutorial_manager:
+			self.tutorial_manager.show_tutorial("welcome")
+	
+	def show_tutorial(self, tutorial_key: str):
+		"""Show a specific tutorial"""
+		if self.tutorial_manager:
+			self.tutorial_manager.show_tutorial(tutorial_key)
+		else:
+			print(f"Tutorial '{tutorial_key}' requested but TutorialManager not found")
+	
+	def get_stock_info(self, ticker: str) -> dict:
+		"""Get all information about a stock for display"""
+		if ticker not in self.stocks:
+			return {}
+		
+		stock = self.stocks[ticker]
+		return {
+			"name": stock.name,
+			"ticker": ticker,
+			"current_price": stock.get_current_price(),
+			"previous_price": stock.get_previous_price(),
+			"price_change": stock.get_price_change_percent(),
+			"trend": stock.get_trend_symbol(),
+			"news": stock.news_history[stock.current_quarter] if stock.current_quarter < len(stock.news_history) else "",
+			"sentiment": stock.sentiment_history[stock.current_quarter] if stock.current_quarter < len(stock.sentiment_history) else 0.5,
+			"owned_shares": self.portfolio.get_shares_owned(ticker)
+		}
 	
 	@private
 	def _update_ui(self):
@@ -227,7 +295,3 @@ class Game_manager(Node):
 			print(f"Error updating Portfolio View: {e}")
 		
 		print(f"UI Updated - Cash: ${self.portfolio.cash:.2f}, Portfolio Value: ${self.portfolio.get_total_value(self.stocks):.2f}")
-
-
-	def sell_stock(self):
-		pass
