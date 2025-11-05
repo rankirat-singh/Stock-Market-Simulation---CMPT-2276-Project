@@ -280,6 +280,16 @@ class Game_manager(Node):
 		if not root:
 			return
 		
+		# Update candlestick chart if it exists
+		try:
+			chart = root.find_child("CandlestickChart", True, False)
+			if chart and chart.has_method("set_stock_data"):
+				apple_stock = self.stocks["AAPL"]
+				chart.call("set_stock_data", apple_stock.price_history)
+				print("✅ Updated candlestick chart")
+		except Exception as e:
+			print(f"Chart update failed: {e}")
+		
 		# Update Stock View - Stock Price Display
 		try:
 			stock_view = root.find_child("Stock View", True, False)
@@ -322,6 +332,7 @@ class Game_manager(Node):
 						holdings_text = "No stocks owned"
 					stock_value.set_text(holdings_text.strip())
 				
+				
 				# Update total portfolio value
 				portfolio_value_label = portfolio_view.find_child("PortfolioValue", True, False)
 				if portfolio_value_label:
@@ -330,4 +341,6 @@ class Game_manager(Node):
 		except Exception as e:
 			print(f"Error updating Portfolio View: {e}")
 		
-		print(f"UI Updated - Cash: ${self.portfolio.cash:.2f}, Portfolio Value: ${self.portfolio.get_total_value(self.stocks):.2f}")
+		# Print summary
+		total_value = self.portfolio.get_total_value(self.stocks)
+		print(f"UI Updated - Cash: ${self.portfolio.cash:.2f}, Portfolio Value: ${total_value:.2f}")
