@@ -105,17 +105,15 @@ Quarter 4:
 			print(f"Tutorial '{tutorial_key}' not found")
 			return False
 		
-		if tutorial_key in self.tutorials_shown:
-			print(f"Tutorial '{tutorial_key}' already shown")
-			return False
+		# Always allow re-showing tutorials (removed the "already shown" check)
+		# Users might want to review tutorials
 		
 		self.tutorials_shown[tutorial_key] = True
 		tutorial = self.tutorials[tutorial_key]
 		
+		# Print to console as fallback
 		print(f"\n{'='*60}")
 		print(f"TUTORIAL: {tutorial['title']}")
-		print(f"{'='*60}")
-		print(tutorial['content'])
 		print(f"{'='*60}\n")
 		
 		return True

@@ -20,9 +20,14 @@ class UIManager(Node):
 	def _init(self):
 		self.game_manager = None
 		self.tutorial_manager = None
+		self.tutorial_dialog = None
 	
 	def _ready(self):
 		print("UI Manager initialized")
+		# Try to find tutorial dialog in scene
+		self.tutorial_dialog = self.get_node_or_null("/root/MainScene/TutorialDialog")
+		if self.tutorial_dialog:
+			print("Tutorial dialog found and connected")
 	
 	def set_game_manager(self, gm):
 		"""Set reference to game manager"""
@@ -45,12 +50,26 @@ class UIManager(Node):
 	def show_tutorial_dialog(self, tutorial_key: str):
 		"""Display tutorial popup dialog"""
 		if not self.tutorial_manager:
+			print("No tutorial manager available")
 			return
 		
 		tutorial = self.tutorial_manager.get_tutorial_content(tutorial_key)
-		if tutorial:
-			print(f"\n📚 Showing tutorial: {tutorial['title']}")
-			self.tutorial_manager.show_tutorial(tutorial_key)
+		if not tutorial:
+			print(f"Tutorial '{tutorial_key}' not found")
+			return
+		
+		# Mark as shown
+		self.tutorial_manager.show_tutorial(tutorial_key)
+		
+		# Show in dialog if available
+		if self.tutorial_dialog:
+			self.tutorial_dialog.set_title(tutorial['title'])
+			content_label = self.tutorial_dialog.find_child("TutorialContent", True, False)
+			if content_label:
+				content_label.set_text(tutorial['content'])
+			self.tutorial_dialog.popup_centered()
+		else:
+			print("Tutorial dialog not found - showing in console only")
 	
 	def update_stock_display(self, stock, ticker: str, parent_node):
 		"""Update stock information display"""
@@ -70,11 +89,11 @@ class UIManager(Node):
 			if price_label:
 				current_price = stock.get_current_price()
 				price_label.set_text(f"{current_price:.2f}USD")
-			
-			print(f"✅ Updated display for {ticker}")
+		
+			print(f" Updated display for {ticker}")
 		except Exception as e:
 			print(f"Error updating stock display: {e}")
 	
 	def show_confirmation_dialog(self, title: str, message: str):
 		"""Show a confirmation dialog"""
-		print(f"📢 {title}: {message}")
+		print(f" {title}: {message}")

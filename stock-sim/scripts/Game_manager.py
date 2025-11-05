@@ -43,6 +43,7 @@ class Game_manager(Node):
 		
 		# Update UI with initial values
 		self.call_deferred("_update_ui")
+		self.call_deferred("_update_quarter_display")
 		
 		# Show welcome tutorial
 		self.call_deferred("show_welcome_tutorial")
@@ -109,7 +110,8 @@ class Game_manager(Node):
 		stock = self.stocks[ticker]
 		total_cost = stock.get_current_price() * shares
 		
-		if not self.portfolio.can_afford(total_cost):
+		# Check if we can afford it
+		if self.portfolio.cash < total_cost:
 			print(f"Not enough cash to buy {shares} shares of {ticker} (need ${total_cost:.2f}, have ${self.portfolio.cash:.2f})")
 			return False
 		
@@ -171,9 +173,43 @@ class Game_manager(Node):
 				stock.advance_quarter()
 			print(f"Advanced to Quarter {self.current_quarter + 1}")
 			self._update_ui()  # Update UI with new quarter prices
+			self._update_quarter_display()  # Update quarter label
 		else:
 			print("Game Over!")
-			# add end game logic here later
+			self._show_end_game()
+	
+	def _update_quarter_display(self):
+		"""Update the quarter indicator in UI"""
+		root = self.get_parent()
+		if not root:
+			return
+		
+		try:
+			quarter_label = root.find_child("QuarterLabel", True, False)
+			if quarter_label:
+				quarter_label.set_text(f"Quarter {self.current_quarter + 1} of {self.max_quarters}")
+				print(f"✅ Updated quarter display: Q{self.current_quarter + 1}/{self.max_quarters}")
+			else:
+				print("⚠️ QuarterLabel not found in scene")
+		except Exception as e:
+			print(f"Error updating quarter display: {e}")
+	
+	def _show_end_game(self):
+		"""Show end game results"""
+		total_value = self.portfolio.get_total_value(self.stocks)
+		profit = self.portfolio.get_profit_loss(self.stocks)
+		profit_pct = self.portfolio.get_profit_loss_percent(self.stocks)
+		
+		print("\n" + "="*60)
+		print("GAME OVER!")
+		print("="*60)
+		print(f"Final Portfolio Value: ${total_value:.2f}")
+		print(f"Profit/Loss: ${profit:.2f} ({profit_pct:+.2f}%)")
+		if profit > 0:
+			print("🎉 Congratulations! You made a profit!")
+		else:
+			print("📉 Better luck next time!")
+		print("="*60)
 	
 	def is_game_over(self) -> bool:
 		"""Check if all quarters are complete"""
