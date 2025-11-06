@@ -272,6 +272,24 @@ class Game_manager(Node):
 			"owned_shares": self.portfolio.get_shares_owned(ticker)
 		}
 	
+	def update_chart_for_stock(self, ticker: str = "AAPL"):
+		"""Update the candlestick chart to show a specific stock"""
+		root = self.get_parent()
+		if not root:
+			return
+		
+		try:
+			chart = root.find_child("CandlestickChart", True, False)
+			if chart and ticker in self.stocks:
+				stock = self.stocks[ticker]
+				chart.call("set_stock_data", stock.price_history)
+				print(f" Updated chart to show {ticker}")
+			else:
+				print(f" Chart or stock {ticker} not found")
+		except Exception as e:
+			print(f"Error updating chart: {e}")
+	
+	
 	@private
 	def _update_ui(self):
 		"""Update all UI elements with current game state"""
@@ -343,4 +361,6 @@ class Game_manager(Node):
 		
 		# Print summary
 		total_value = self.portfolio.get_total_value(self.stocks)
-		print(f"UI Updated - Cash: ${self.portfolio.cash:.2f}, Portfolio 
+		print(f"UI Updated - Cash: ${self.get_portfolio_value()}")
+	
+
