@@ -343,4 +343,4 @@ class Game_manager(Node):
 		
 		# Print summary
 		total_value = self.portfolio.get_total_value(self.stocks)
-		print(f"UI Updated - Cash: ${self.portfolio.cash:.2f}, Portfolio Value: ${total_value:.2f}")
+		print(f"UI Updated - Cash: ${self.portfolio.cash:.2f}, Portfolio 

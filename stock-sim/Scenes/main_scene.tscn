@@ -37,8 +37,6 @@ rotation = 0.0
 scale = Vector2(1, 1)
 skew = 0.0
 script = ExtResource("1_52fb6")
-current_quarter = 0
-max_quarters = 4
 
 [node name="GameWindow" type="CanvasLayer" parent="."]
 
@@ -87,29 +85,6 @@ text = "258.54USD"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_colors/font_color = Color(0.23529412, 0.23529412, 0.23529412, 1)
-text = "
-1000
-
-800
-
-600
-
-500
-
-400
-
-200
-
-100
-
-0"
-horizontal_alignment = 2
-
 [node name="X-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
 position = Vector2(75, 405)
 points = PackedVector2Array(0, 0, 1050, 0)
@@ -122,53 +97,9 @@ points = PackedVector2Array(0, 0, 0, 380)
 width = 2.0
 default_color = Color(0.23392558, 0.2339254, 0.23392552, 1)
 
-[node name="Q1Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(281.25, 405)
-points = PackedVector2Array(0, -102, 0, -10)
-width = 5.0
-default_color = Color(0, 0.8, 0, 1)
-
-[node name="Q1Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(281.25, 405)
-points = PackedVector2Array(0, -90, 0, -30)
-width = 50.0
-default_color = Color(0, 0.8, 0, 1)
-
-[node name="Q2Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(537.5, 405)
-points = PackedVector2Array(0, -135, 0, -60)
-width = 5.0
-default_color = Color(0, 0.8, 0, 1)
-
-[node name="Q2Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(537.5, 405)
-points = PackedVector2Array(0, -120, 0, -90)
-width = 50.0
-default_color = Color(0, 0.8, 0, 1)
-
-[node name="Q3Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(793.75, 405)
-points = PackedVector2Array(0, -150, 0, -50)
-width = 5.0
-default_color = Color(1, 0, 0, 1)
-
-[node name="Q3Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(793.75, 405)
-points = PackedVector2Array(0, -120, 0, -95)
-width = 50.0
-default_color = Color(1, 0, 0, 1)
-
-[node name="Q4Wick" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(1050, 405)
-points = PackedVector2Array(0, -190, 0, -75)
-width = 5.0
-default_color = Color(0, 0.8, 0, 1)
-
-[node name="Q4Candle" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-position = Vector2(1050, 405)
-points = PackedVector2Array(0, -95, 0, -170)
-width = 50.0
-default_color = Color(0, 0.8, 0, 1)
+[node name="CandlestickChart" type="Control" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+custom_minimum_size = Vector2(800, 400)
+layout_mode = 2
 
 [node name="ButtonContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
 layout_mode = 2
@@ -191,6 +122,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 35
 text = "Hold"
+
+[node name="NextQuarterButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+text = "Next Quarter"
 
 [node name="Portfolio View" type="PanelContainer" parent="GameWindow/TabContainer"]
 visible = false
@@ -246,5 +181,16 @@ theme_override_font_sizes/font_size = 45
 text = "0.0 USD"
 horizontal_alignment = 1
 
+[node name="QuarterLabel" type="Label" parent="GameWindow"]
+custom_minimum_size = Vector2(50, 50)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -108.0
+offset_bottom = 50.0
+grow_horizontal = 0
+text = "Quarter 1 of 4"
+
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButton" to="." method="buy_stock"]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/SellButton" to="." method="sell_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButton" to="." method="advance_quarter"]
