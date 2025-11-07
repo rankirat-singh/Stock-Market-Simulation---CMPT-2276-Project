@@ -1,56 +1,58 @@
-# Stock Trading Simulator - Base Classes Documentation
+# Stock Trading Simulator - Implementation Guide
 
-## Completed Components
+This document explains how we built the stock trading simulator. I'll walk you through what each part does and how everything fits together.
 
-### 1. Stock.py
-**Purpose:** Represents a single stock in the trading simulator
+## What We've Built So Far
 
-**Key Attributes:**
-- `name` - Company name (e.g., "Apple Inc.")
-- `ticker` - Stock symbol (e.g., "AAPL")
-- `price_history` - List of 4 prices [Q1, Q2, Q3, Q4]
-- `news_history` - List of 4 news headlines
-- `sentiment_history` - List of 4 sentiment indicators
-- `current_quarter` - Tracks which quarter we're in (0-3)
+### The Stock Class (Stock.py)
 
-**Key Methods:**
-- `get_current_price()` - Returns price for current quarter
-- `get_previous_price()` - Returns price from last quarter
-- `get_price_change_percent()` - Calculates % change from previous quarter
-- `get_current_news()` - Returns news for current quarter
-- `get_current_sentiment()` - Returns sentiment for current quarter
-- `advance_quarter()` - Moves to next quarter
-- `reset()` - Resets to quarter 0
-- `get_trend_symbol()` - Returns ↑ ↓ or → based on price change
+This class is basically how we represent each company in the game. Think of it like a container that holds all the info about one stock.
 
-### 2. Portfolio.py
-**Purpose:** Manages player's cash and stock holdings
+**What it keeps track of:**
+- The company's name and ticker symbol (like "Apple Inc." and "AAPL")
+- How the price changes over 4 quarters - we store all 4 prices in a list
+- News headlines for each quarter (so players know what's happening)
+- Sentiment scores (helps players decide if it's a good time to buy/sell)
+- Which quarter we're currently in
 
-**Key Attributes:**
-- `cash` - Current available cash
-- `starting_cash` - Initial cash amount ($10,000)
-- `holdings` - Dictionary of stocks owned: `{'AAPL': 2, 'MSFT': 1}`
-- `transaction_history` - List of all buy/sell transactions
+**What can one do with it:**
+- Check the current price for whatever quarter we're in
+- Look at the previous quarter's price to compare
+- Calculate how much the price went up or down (as a percentage)
+- Get the news and sentiment for the current quarter
+- Move forward to the next quarter
+- Reset everything back to Quarter 1
+- Get a little arrow (↑ ↓ or →) showing if the price went up, down, or stayed flat
 
-**Key Methods:**
-- `buy_stock(stock, shares=1)` - Buy shares if you have enough cash (returns True/False)
-- `sell_stock(stock, shares=1)` - Sell shares if you own them (returns True/False)
-- `get_shares_owned(ticker)` - Check how many shares you own of a stock
-- `get_total_value(stocks_dict)` - Calculate total portfolio worth (cash + holdings)
-- `get_profit_loss(stocks_dict)` - Calculate profit or loss in dollars
-- `get_profit_loss_percent(stocks_dict)` - Calculate profit or loss as percentage
-- `can_afford(stock, shares=1)` - Check if you can afford to buy
-- `reset()` - Reset to starting state
+### The Portfolio Class (Portfolio.py)
 
-## Testing
+This handles all the player's money and stocks they own. It's like their brokerage account.
 
-Run `simple_test.py` to verify everything works:
+**What it tracks:**
+- How much cash the player has right now
+- Their starting amount (we give them $10,000 to start)
+- Which stocks they own and how many shares (stored as something like `{'AAPL': 2, 'MSFT': 1}`)
+- A history of every trade they've made
+
+**What you can do with it:**
+- Buy stocks (but only if you have enough money!)
+- Sell stocks (but only if you actually own them)
+- Check how many shares you own of any stock
+- Calculate your total net worth (cash plus the value of all your stocks)
+- See if you're making money or losing money
+- Check if you can afford something before buying
+- Reset everything back to the starting state
+
+## How to Test It
+
+I made a test script called `simple_test.py` that checks if everything's working. Just run:
 
 ```bash
 python simple_test.py
 ```
 
-Expected output:
+If it's working see something like:
+
 ```
 Creating a stock...
 Stock: Apple Inc. (AAPL)
@@ -72,55 +74,62 @@ Holdings: {'AAPL': 1}
 
 Portfolio value: $10000
 
-✅ All tests passed!
+ All tests passed!
 ```
 
-## Game Flow
+## How the Game Actually Works
 
-1. **Start:** Quarter 1, $10,000 cash, no stocks
-2. **Each Quarter:**
-   - Show 3 stocks with current prices
-   - Player chooses: Buy/Sell/Hold ONE stock
-   - Advance to next quarter
-   - Show results (price changes, portfolio value)
-3. **End (Quarter 4):**
-   - Calculate final portfolio value
-   - Win if value > $10,000
-   - Lose if value ≤ $10,000
+Here's the basic flow I had in mind:
 
-## Sample Stock Data
+1. **Starting Out:** 
+   - It's Quarter 1
+   - You've got $10,000 in cash
+   - You don't own any stocks yet
 
-Here's the recommended data for your 3 stocks:
+2. **Each Quarter (repeats 4 times):**
+   - The game shows you 3 different stocks with their current prices
+   - You pick ONE action: Buy a stock, Sell a stock, or Hold (do nothing)
+   - Once you decide, we move to the next quarter
+   - You can see how prices changed and what your portfolio is worth now
 
-**AAPL (Apple):**
-- Prices: [150, 160, 155, 170]
-- News: ["Strong iPhone sales", "Services revenue up", "Minor dip", "Record quarter"]
-- Sentiment: ["Positive", "Positive", "Neutral", "Very Positive"]
-
-**MSFT (Microsoft):**
-- Prices: [300, 290, 310, 320]
-- News: ["Cloud growth slows", "AI investments", "Azure revenue up", "Strong finish"]
-- Sentiment: ["Neutral", "Negative", "Positive", "Positive"]
-
-**TSLA (Tesla):**
-- Prices: [200, 220, 240, 230]
-- News: ["Production delays", "New factory opens", "Record deliveries", "Competition concerns"]
-- Sentiment: ["Negative", "Positive", "Very Positive", "Neutral"]
-
-## ✅ Verification Checklist
-
-- [x] Stock class tracks prices correctly
-- [x] Stock advances through quarters
-- [x] Stock calculates price changes
-- [x] Portfolio handles buying (with cash validation)
-- [x] Portfolio handles selling (with ownership validation)
-- [x] Portfolio calculates total value correctly
-- [x] Portfolio tracks profit/loss
-- [x] All tests pass
+3. **The End (after Quarter 4):**
+   - We calculate what your whole portfolio is worth
+   - If it's more than $10,000, you win!
+   - If it's $10,000 or less, you lose
 
 
+
+## The Stock Data We're Using
+
+I set up data for 3 stocks. The prices are designed to make the game interesting - some go up, some go down, there's a bit of risk involved.
+
+**Apple (AAPL):**
+- Prices across quarters: $150 → $160 → $155 → $170
+- News: "Strong iPhone sales" → "Services revenue up" → "Minor dip" → "Record quarter"
+- Overall sentiment: Mostly positive, one neutral quarter
+
+**Microsoft (MSFT):**
+- Prices: $300 → $290 → $310 → $320
+- News: "Cloud growth slows" → "AI investments" → "Azure revenue up" → "Strong finish"
+- Sentiment: Starts shaky but gets better
+
+**Tesla (TSLA):**
+- Prices: $200 → $220 → $240 → $230
+- News: "Production delays" → "New factory opens" → "Record deliveries" → "Competition concerns"
+- Sentiment: Pretty volatile - goes from negative to very positive and back to neutral
+
+## What's Working (Checklist)
+
+Just to keep track of what we've tested and confirmed:
+
+- [x] Stock prices update correctly each quarter
+- [x] Moving between quarters works properly
+- [x] Price change calculations are accurate
+- [x] Buying stocks works (and checks if you have enough money)
+- [x] Selling stocks works (and checks if you own enough shares)
+- [x] Portfolio value calculations are correct
+- [x] Profit/loss tracking works
+- [x] All the tests pass
 
 ---
-
-**Status:** Base classes complete and tested ✅  
 
