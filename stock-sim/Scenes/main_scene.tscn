@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://t33xx3viqu2q"]
+[gd_scene load_steps=4 format=3 uid="uid://t33xx3viqu2q"]
 
-[ext_resource type="Script" path="res://scripts/Game_manager.py" id="1_52fb6"]
+[ext_resource type="Script" path="res://scripts/Game_manager.gd" id="1_gd"]
+[ext_resource type="Script" uid="uid://dxn6gcn4b3wnq" path="res://scripts/candlestick_chart.gd" id="2_pw63i"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ia5b"]
 content_margin_left = 10.0
@@ -9,34 +10,7 @@ content_margin_right = 10.0
 content_margin_bottom = 10.0
 
 [node name="MainScene" type="Node2D"]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-visible = true
-modulate = Color(1, 1, 1, 1)
-self_modulate = Color(1, 1, 1, 1)
-show_behind_parent = false
-top_level = false
-clip_children = 0
-light_mask = 1
-visibility_layer = 1
-z_index = 0
-z_as_relative = true
-y_sort_enabled = false
-texture_filter = 0
-texture_repeat = 0
-use_parent_material = false
-position = Vector2(0, 0)
-rotation = 0.0
-scale = Vector2(1, 1)
-skew = 0.0
-script = ExtResource("1_52fb6")
+script = ExtResource("1_gd")
 
 [node name="GameWindow" type="CanvasLayer" parent="."]
 
@@ -44,11 +18,8 @@ script = ExtResource("1_52fb6")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -17.0
-offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.0117791, 1.0094213)
 current_tab = 0
 
 [node name="Stock View" type="VBoxContainer" parent="GameWindow/TabContainer"]
@@ -59,7 +30,8 @@ metadata/_tab_index = 0
 [node name="HBoxContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 665
+size_flags_vertical = 0
+theme_override_constants/separation = 50
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
 layout_mode = 2
@@ -76,14 +48,21 @@ text = "AAPL"
 
 [node name="StockPrice" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 10
+custom_minimum_size = Vector2(800, 0)
+size_flags_horizontal = 4
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 50
 text = "258.54USD"
+autowrap_mode = 1
 
 [node name="GraphContainer" type="PanelContainer" parent="GameWindow/TabContainer/Stock View"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="CandlestickChart" type="Control" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
+custom_minimum_size = Vector2(800, 400)
+layout_mode = 2
+script = ExtResource("2_pw63i")
 
 [node name="X-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
 position = Vector2(75, 405)
@@ -97,10 +76,6 @@ points = PackedVector2Array(0, 0, 0, 380)
 width = 2.0
 default_color = Color(0.23392558, 0.2339254, 0.23392552, 1)
 
-[node name="CandlestickChart" type="Control" parent="GameWindow/TabContainer/Stock View/GraphContainer"]
-custom_minimum_size = Vector2(800, 400)
-layout_mode = 2
-
 [node name="ButtonContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
 layout_mode = 2
 theme_override_constants/separation = 20
@@ -108,24 +83,34 @@ theme_override_constants/separation = 20
 [node name="BuyButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 theme_override_font_sizes/font_size = 35
 text = "Buy"
 
 [node name="SellButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 theme_override_font_sizes/font_size = 35
 text = "Sell"
 
 [node name="HoldButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 theme_override_font_sizes/font_size = 35
 text = "Hold"
 
 [node name="NextQuarterButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
 layout_mode = 2
+focus_mode = 0
 text = "Next Quarter"
+
+[node name="LearnButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = " Learn"
 
 [node name="Portfolio View" type="PanelContainer" parent="GameWindow/TabContainer"]
 visible = false
@@ -193,4 +178,6 @@ text = "Quarter 1 of 4"
 
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButton" to="." method="buy_stock"]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/SellButton" to="." method="sell_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButton" to="." method="hold_stock"]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButton" to="." method="advance_quarter"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButton" to="." method="show_tutorial_menu"]
