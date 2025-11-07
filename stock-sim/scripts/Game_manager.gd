@@ -4,11 +4,17 @@ extends Node2D
 var cash: float = 10000.0
 var current_quarter: int = 0
 var max_quarters: int = 4
+var current_stock: String = "AAPL"  # Currently selected stock
 var stocks_owned: Dictionary = {"AAPL": 0, "MSFT": 0, "TSLA": 0}
 var stock_prices: Dictionary = {
 	"AAPL": [150.0, 160.0, 155.0, 170.0],
 	"MSFT": [300.0, 290.0, 310.0, 320.0],
 	"TSLA": [200.0, 220.0, 210.0, 240.0]
+}
+var stock_names: Dictionary = {
+	"AAPL": "Apple Inc.",
+	"MSFT": "Microsoft Corp.",
+	"TSLA": "Tesla Inc."
 }
 
 # Tutorial data
@@ -95,38 +101,137 @@ func show_tutorial_menu():
 	menu_dialog.confirmed.connect(func(): menu_dialog.queue_free())
 	menu_dialog.canceled.connect(func(): menu_dialog.queue_free())
 
+func select_stock(ticker: String):
+	"""Switch to viewing a different stock"""
+	current_stock = ticker
+	print("Selected stock: ", ticker)
+	
+	# Update stock name labels
+	var stock_name_label = find_child("StockName", true, false)
+	if stock_name_label:
+		stock_name_label.set_text(stock_names[ticker])
+	
+	var stock_code_label = find_child("StockCode", true, false)
+	if stock_code_label:
+		stock_code_label.set_text(ticker)
+	
+	update_display()
+	
+	# Update chart if it exists
+	var chart = find_child("CandlestickChart", true, false)
+	if chart and chart.has_method("set_stock_data"):
+		chart.call("set_stock_data", stock_prices[ticker])
+
 func update_display():
 	var label = find_child("StockPrice", true, false)
 	if label:
-		var current_price = stock_prices["AAPL"][current_quarter]
-		label.set_text("Cash: $%.2f\nAAPL: $%.2f\nQ%d/%d" % [cash, current_price, current_quarter + 1, max_quarters])
+		var current_price = stock_prices[current_stock][current_quarter]
+		label.set_text("Cash: $%.2f\nPrice: $%.2f | Owned: %d\nQ%d/%d" % [cash, current_price, stocks_owned[current_stock], current_quarter + 1, max_quarters])
+	
+	# Update Portfolio View
+	update_portfolio_view()
 
-func buy_stock(ticker="AAPL", shares=1):
-	print("Buy clicked: ", ticker)
+func update_portfolio_view():
+	"""Update the Portfolio View tab with current holdings"""
+	var cash_value_label = find_child("CashHoldingsValue", true, false)
+	if cash_value_label:
+		cash_value_label.set_text("$%.2f" % cash)
+	
+	var stock_value_label = find_child("StockHoldingsValue", true, false)
+	if stock_value_label:
+		var holdings_text = ""
+		for ticker in ["AAPL", "MSFT", "TSLA"]:
+			if stocks_owned[ticker] > 0:
+				var value = stocks_owned[ticker] * stock_prices[ticker][current_quarter]
+				holdings_text += "%s: %d shares ($%.2f)\n" % [ticker, stocks_owned[ticker], value]
+		if holdings_text == "":
+			holdings_text = "No stocks owned"
+		stock_value_label.set_text(holdings_text.strip_edges())
+	
+	var portfolio_value_label = find_child("PortfolioValue", true, false)
+	if portfolio_value_label:
+		var total_value = cash
+		for ticker in ["AAPL", "MSFT", "TSLA"]:
+			total_value += stocks_owned[ticker] * stock_prices[ticker][current_quarter]
+		var profit = total_value - 10000.0
+		portfolio_value_label.set_text("$%.2f\n(Profit: $%.2f)" % [total_value, profit])
+
+func buy_stock(ticker="", shares=1):
+	if ticker == "":
+		ticker = current_stock
+	
+	# Show quantity dialog
+	show_quantity_dialog("buy", ticker)
+
+func sell_stock(ticker="", shares=1):
+	if ticker == "":
+		ticker = current_stock
+	
+	# Show quantity dialog
+	show_quantity_dialog("sell", ticker)
+
+func show_quantity_dialog(action: String, ticker: String):
+	"""Show dialog to input number of shares"""
+	var dialog = ConfirmationDialog.new()
+	dialog.title = action.capitalize() + " " + ticker
+	dialog.dialog_text = "How many shares?\n\nCurrent price: $%.2f\nYou own: %d shares\nCash: $%.2f" % [stock_prices[ticker][current_quarter], stocks_owned[ticker], cash]
+	dialog.ok_button_text = action.capitalize()
+	dialog.cancel_button_text = "Cancel"
+	
+	# Add SpinBox for quantity input
+	var vbox = VBoxContainer.new()
+	var label = Label.new()
+	label.text = "Quantity:"
+	var spinbox = SpinBox.new()
+	spinbox.min_value = 1
+	spinbox.max_value = 999
+	spinbox.value = 1
+	spinbox.step = 1
+	spinbox.allow_greater = false
+	spinbox.allow_lesser = false
+	
+	vbox.add_child(label)
+	vbox.add_child(spinbox)
+	dialog.add_child(vbox)
+	
+	# Connect confirmation
+	dialog.confirmed.connect(func():
+		var quantity = int(spinbox.value)
+		if action == "buy":
+			execute_buy(ticker, quantity)
+		else:
+			execute_sell(ticker, quantity)
+		dialog.queue_free()
+	)
+	dialog.canceled.connect(func(): dialog.queue_free())
+	
+	add_child(dialog)
+	dialog.popup_centered()
+
+func execute_buy(ticker: String, shares: int):
+	"""Actually execute the buy"""
+	print("Buy clicked: ", ticker, " x", shares)
 	var current_price = stock_prices[ticker][current_quarter]
 	var total_cost = current_price * shares
 	
 	if cash >= total_cost:
 		cash -= total_cost
 		stocks_owned[ticker] += shares
-		var label = find_child("StockPrice", true, false)
-		if label:
-			label.set_text("BOUGHT %dx %s @ $%.2f\nCash: $%.2f\nOwned: %d shares" % [shares, ticker, current_price, cash, stocks_owned[ticker]])
+		update_display()
 	else:
 		var label = find_child("StockPrice", true, false)
 		if label:
 			label.set_text("NOT ENOUGH CASH!\nNeed: $%.2f\nHave: $%.2f" % [total_cost, cash])
 
-func sell_stock(ticker="AAPL", shares=1):
-	print("Sell clicked: ", ticker)
+func execute_sell(ticker: String, shares: int):
+	"""Actually execute the sell"""
+	print("Sell clicked: ", ticker, " x", shares)
 	if stocks_owned[ticker] >= shares:
 		var current_price = stock_prices[ticker][current_quarter]
 		var total_value = current_price * shares
 		cash += total_value
 		stocks_owned[ticker] -= shares
-		var label = find_child("StockPrice", true, false)
-		if label:
-			label.set_text("SOLD %dx %s @ $%.2f\nCash: $%.2f\nOwned: %d shares" % [shares, ticker, current_price, cash, stocks_owned[ticker]])
+		update_display()
 	else:
 		var label = find_child("StockPrice", true, false)
 		if label:
@@ -159,4 +264,3 @@ func advance_quarter():
 				total_value += stocks_owned[ticker] * stock_prices[ticker][current_quarter]
 			var profit = total_value - 10000.0
 			label.set_text("GAME OVER!\nFinal Value: $%.2f\nProfit: $%.2f" % [total_value, profit])
-

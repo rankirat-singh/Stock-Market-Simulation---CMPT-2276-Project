@@ -26,27 +26,37 @@ class Game_manager(Node):
 	
 	def _ready(self) -> None:
 		"""Initialize game when scene loads"""
-		# Initialize portfolio with $10,000 starting cash
-		self.portfolio = Portfolio(10000)
-		
-		# Initialize stocks
-		self.stocks = {}
-		self._initialize_stocks()
-		
-		# Initialize managers
-		self.tutorial_manager = None
-		self.ui_manager = None
-		self.pending_action = None  # Store pending buy/sell action
-		
-		print(f"Game initialized: Quarter {self.current_quarter + 1}/{self.max_quarters}")
-		print(f"Starting cash: ${self.portfolio.cash}")
-		
-		# Update UI with initial values
-		self.call_deferred("_update_ui")
-		self.call_deferred("_update_quarter_display")
-		
-		# Show welcome tutorial
-		self.call_deferred("show_welcome_tutorial")
+		try:
+			print("=== Game Manager _ready() starting ===")
+			
+			# Initialize portfolio with $10,000 starting cash
+			self.portfolio = Portfolio(10000)
+			print(f"✓ Portfolio initialized: ${self.portfolio.cash}")
+			
+			# Initialize stocks
+			self.stocks = {}
+			self._initialize_stocks()
+			print(f"✓ Stocks initialized: {list(self.stocks.keys())}")
+			
+			# Initialize managers (optional - won't crash if missing)
+			self.tutorial_manager = None
+			self.ui_manager = None
+			self.pending_action = None
+			print("✓ Managers initialized")
+			
+			print(f"✓ Game initialized: Quarter {self.current_quarter + 1}/{self.max_quarters}")
+			print(f"✓ Starting cash: ${self.portfolio.cash}")
+			
+			# Update UI with initial values
+			self.call_deferred("_update_ui")
+			self.call_deferred("_update_quarter_display")
+			
+			print("=== Game Manager _ready() complete ===")
+			
+		except Exception as e:
+			print(f" ERROR in _ready(): {e}")
+			import traceback
+			traceback.print_exc()
 	
 	def _process(self, delta: float) -> None:
 		pass  # Game is turn-based, no continuous updates needed
@@ -293,74 +303,45 @@ class Game_manager(Node):
 	@private
 	def _update_ui(self):
 		"""Update all UI elements with current game state"""
-		# Find UI nodes in the scene
-		root = self.get_parent()
-		if not root:
-			return
-		
-		# Update candlestick chart if it exists
 		try:
-			chart = root.find_child("CandlestickChart", True, False)
-			if chart and chart.has_method("set_stock_data"):
-				apple_stock = self.stocks["AAPL"]
-				chart.call("set_stock_data", apple_stock.price_history)
-				print("✅ Updated candlestick chart")
-		except Exception as e:
-			print(f"Chart update failed: {e}")
-		
-		# Update Stock View - Stock Price Display
-		try:
-			stock_view = root.find_child("Stock View", True, False)
-			if stock_view:
-				print(f"Found Stock View!")
-				stock_price_label = stock_view.find_child("StockPrice", True, False)
-				if stock_price_label:
+			print("=== _update_ui() starting ===")
+			
+			# Find UI nodes in the scene
+			root = self.get_parent()
+			if not root:
+				print("⚠ No parent node found")
+				return
+			
+			print(f"✓ Root node: {root.get_name()}")
+			
+			# Update candlestick chart if it exists
+			try:
+				chart = root.find_child("CandlestickChart", True, False)
+				if chart and chart.has_method("set_stock_data"):
 					apple_stock = self.stocks["AAPL"]
-					current_price = apple_stock.get_current_price()
-					stock_price_label.set_text(f"{current_price:.2f}USD")
-					print(f" Updated price to: ${current_price:.2f}")
+					chart.call("set_stock_data", apple_stock.price_history)
+					print("✅ Updated candlestick chart")
 				else:
-					print(" Could not find StockPrice label!")
-			else:
-				print(" Could not find Stock View!")
-		except Exception as e:
-			print(f"Error updating Stock View: {e}")
-		
-		# Update Portfolio View
-		try:
-			portfolio_view = root.find_child("Portfolio View", True, False)
-			if portfolio_view:
-				# Update cash holdings
-				cash_value = portfolio_view.find_child("CashHoldingsValue", True, False)
-				if cash_value:
-					cash_value.set_text(f"{self.portfolio.cash:.2f} USD")
-				
-				# Update stock holdings
-				stock_value = portfolio_view.find_child("StockHoldingsValue", True, False)
-				if stock_value:
-					holdings_text = ""
-					for ticker in ["AAPL", "MSFT", "TSLA"]:
-						shares = self.portfolio.get_shares_owned(ticker)
-						if shares > 0:
-							stock = self.stocks[ticker]
-							value = shares * stock.get_current_price()
-							holdings_text += f"{ticker}: {shares} shares ({value:.2f} USD)\n"
-					
-					if holdings_text == "":
-						holdings_text = "No stocks owned"
-					stock_value.set_text(holdings_text.strip())
-				
-				
-				# Update total portfolio value
-				portfolio_value_label = portfolio_view.find_child("PortfolioValue", True, False)
-				if portfolio_value_label:
-					total_value = self.portfolio.get_total_value(self.stocks)
-					portfolio_value_label.set_text(f"{total_value:.2f} USD")
-		except Exception as e:
-			print(f"Error updating Portfolio View: {e}")
-		
-		# Print summary
-		total_value = self.portfolio.get_total_value(self.stocks)
-		print(f"UI Updated - Cash: ${self.get_portfolio_value()}")
-	
-
+					print("⚠ CandlestickChart not found or missing method")
+			except Exception as e:
+				print(f"⚠ Chart update failed: {e}")
+			
+			# Update Stock View - Stock Price Display
+			try:
+				stock_view = root.find_child("Stock View", True, False)
+				if stock_view:
+					print(f"✓ Found Stock View")
+					stock_price_label = stock_view.find_child("StockPrice", True, False)
+					if stock_price_label:
+						apple_stock = self.stocks["AAPL"]
+						current_price = apple_stock.get_current_price()
+						stock_price_label.set_text(f"{current_price:.2f}USD")
+						print(f"✓ Updated price to: ${current_price:.2f}")
+					else:
+						print("⚠ Could not find StockPrice label")
+				else:
+					print("⚠ Could not find Stock View")
+			except Exception as e:
+				print(f"⚠ Error updating Stock View: {e}")
+			
+			print("
