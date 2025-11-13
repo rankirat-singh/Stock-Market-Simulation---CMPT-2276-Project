@@ -29,7 +29,7 @@ class Game_manager(Node):
 		try:
 			# Initialize portfolio
 			self.portfolio = Portfolio(10000)
-			print(f"✅ Portfolio created: ${self.portfolio.cash}")
+			print(f" Portfolio created: ${self.portfolio.cash}")
 			
 			# Initialize stocks
 			self.stocks = {}
@@ -40,7 +40,7 @@ class Game_manager(Node):
 				news_history=["Q1 news", "Q2 news", "Q3 news", "Q4 news"],
 				sentiment_history=[0.8, 0.9, 0.3, 0.95]
 			)
-			print(f"✅ Stocks created: {list(self.stocks.keys())}")
+			print(f" Stocks created: {list(self.stocks.keys())}")
 			
 			# Find the stock price label to use for feedback
 			root = self.get_parent()
@@ -49,11 +49,11 @@ class Game_manager(Node):
 				if self.feedback_label:
 					self.feedback_label.set_text("GAME READY! Click a button")
 			
-			print("✅ GAME INITIALIZED SUCCESSFULLY!")
+			print(" GAME INITIALIZED SUCCESSFULLY!")
 			print("=" * 50)
 			
 		except Exception as e:
-			print(f"❌ ERROR: {e}")
+			print(f" ERROR: {e}")
 			import traceback
 			traceback.print_exc()
 	

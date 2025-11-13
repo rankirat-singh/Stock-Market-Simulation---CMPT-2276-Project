@@ -29,31 +29,31 @@ class Game_manager(Node):
 		try:
 			# Initialize portfolio with $10,000
 			self.portfolio = Portfolio(10000)
-			print(f"✅ Portfolio created: ${self.portfolio.cash}")
+			print(f" Portfolio created: ${self.portfolio.cash}")
 			
 			# Initialize stocks
 			self.stocks = {}
 			self._initialize_stocks()
-			print(f"✅ Stocks initialized: {list(self.stocks.keys())}")
+			print(f" Stocks initialized: {list(self.stocks.keys())}")
 			
 			# Find label for feedback
 			root = self.get_parent()
-			print(f"✅ Root node: {root.get_name() if root else 'None'}")
+			print(f" Root node: {root.get_name() if root else 'None'}")
 			
 			if root:
 				self.label = root.find_child("StockPrice", True, False)
 				if self.label:
 					self.label.set_text(f"Ready! Cash: ${self.portfolio.cash:.2f}")
-					print("✅ Label found and updated")
+					print(" Label found and updated")
 				else:
-					print("⚠️ StockPrice label not found")
+					print(" StockPrice label not found")
 			
 			print("✅ _ready() complete - calling show_tutorial")
 			# Show welcome tutorial
 			self.call_deferred("show_tutorial", "welcome")
 			
 		except Exception as e:
-			print(f"❌ ERROR in _ready(): {e}")
+			print(f" ERROR in _ready(): {e}")
 			import traceback
 			traceback.print_exc()
 	
@@ -123,10 +123,10 @@ class Game_manager(Node):
 			if success:
 				owned = self.portfolio.get_shares_owned(ticker)
 				self.label.set_text(f"BOUGHT {shares}x {ticker}\n${stock.get_current_price():.2f} each\nCash: ${self.portfolio.cash:.2f}\nOwned: {owned}")
-				print(f"✅ Bought {shares}x {ticker}")
+				print(f" Bought {shares}x {ticker}")
 		else:
 			self.label.set_text(f"NOT ENOUGH CASH\nNeed ${total_cost:.2f}\nHave ${self.portfolio.cash:.2f}")
-			print(f"❌ Not enough cash")
+			print(f" Not enough cash")
 	
 	def sell_stock(self, ticker="AAPL", shares=1):
 		"""Sell stock"""
@@ -214,9 +214,9 @@ class Game_manager(Node):
 				dialog.set_ok_button_text("Got it!")
 				self.add_child(dialog)
 				dialog.popup_centered()
-				print("✅ Dialog shown")
+				print(" Dialog shown")
 			except Exception as e:
-				print(f"❌ Dialog error: {e}")
+				print(f" Dialog error: {e}")
 				import traceback
 				traceback.print_exc()
 	
@@ -250,8 +250,8 @@ class Game_manager(Node):
 			
 			self.add_child(menu)
 			menu.popup_centered()
-			print("✅ Tutorial menu shown")
+			print(" Tutorial menu shown")
 		except Exception as e:
-			print(f"❌ Tutorial menu error: {e}")
+			print(f" Tutorial menu error: {e}")
 			import traceback
 			traceback.print_exc()

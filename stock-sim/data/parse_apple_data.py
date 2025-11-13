@@ -7,7 +7,7 @@ data = []
 with open(csv_path, 'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
-        # Parse date and prices (remove $ signs)
+        
         date = datetime.strptime(row['Date'], '%m/%d/%Y')
         close = float(row['Close/Last'].replace('$', ''))
         open_price = float(row['Open'].replace('$', ''))
