@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://t33xx3viqu2q"]
+[gd_scene load_steps=6 format=3 uid="uid://t33xx3viqu2q"]
 
-[ext_resource type="Script" path="res://scripts/Game_manager.gd" id="1_gd"]
+[ext_resource type="Script" uid="uid://n3v6ed63cws0" path="res://scripts/Game_manager.gd" id="1_gd"]
 [ext_resource type="Script" uid="uid://dxn6gcn4b3wnq" path="res://scripts/candlestick_chart.gd" id="2_pw63i"]
+[ext_resource type="Script" uid="uid://c2pftawpa05ox" path="res://scripts/tooltip.gd" id="3_tooltip"]
+[ext_resource type="Script" uid="uid://7fnawxf4ei64" path="res://scripts/question_mark_button.gd" id="4_qmark"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ia5b"]
 content_margin_left = 10.0
@@ -13,6 +15,17 @@ content_margin_bottom = 10.0
 script = ExtResource("1_gd")
 
 [node name="GameWindow" type="CanvasLayer" parent="."]
+
+[node name="TooltipManager" type="Control" parent="GameWindow"]
+z_index = 1000
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_tooltip")
 
 [node name="TabContainer" type="TabContainer" parent="GameWindow"]
 anchors_preset = 15
@@ -28,15 +41,15 @@ alignment = 1
 metadata/_tab_index = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_constants/separation = 50
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
 
 [node name="StockName" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -50,19 +63,18 @@ theme_override_font_sizes/font_size = 30
 text = "AAPL"
 
 [node name="StockPrice" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 50
 text = "258.54USD"
 autowrap_mode = 1
-clip_text = false
 
 [node name="StockSelector" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 10
+alignment = 1
 
 [node name="AAPLButton" type="Button" parent="GameWindow/TabContainer/Stock View/StockSelector"]
 layout_mode = 2
@@ -107,37 +119,99 @@ default_color = Color(0.23392558, 0.2339254, 0.23392552, 1)
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="BuyButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="BuyButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="BuyButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButtonWrapper"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 35
 text = "Buy"
 
-[node name="SellButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="BuyQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButtonWrapper"]
+layout_mode = 2
+focus_mode = 0
+text = "?"
+script = ExtResource("4_qmark")
+tooltip_key = "buy"
+
+[node name="SellButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="SellButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/SellButtonWrapper"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 35
 text = "Sell"
 
-[node name="HoldButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="SellQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/SellButtonWrapper"]
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+text = "?"
+script = ExtResource("4_qmark")
+tooltip_key = "sell"
+
+[node name="HoldButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="HoldButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButtonWrapper"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 35
 text = "Hold"
 
-[node name="NextQuarterButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="HoldQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButtonWrapper"]
+layout_mode = 2
+focus_mode = 0
+text = "?"
+script = ExtResource("4_qmark")
+tooltip_key = "hold"
+
+[node name="NextQuarterButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="NextQuarterButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButtonWrapper"]
 layout_mode = 2
 focus_mode = 0
 text = "Next Quarter"
 
-[node name="LearnButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="NextQuarterQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButtonWrapper"]
+layout_mode = 2
+tooltip_text = "Move to next quater"
+focus_mode = 0
+action_mode = 0
+text = "?"
+script = ExtResource("4_qmark")
+tooltip_key = "next_quarter"
+
+[node name="LearnButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="LearnButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButtonWrapper"]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
 text = " Learn"
+
+[node name="LearnQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButtonWrapper"]
+layout_mode = 2
+tooltip_text = "Instruction"
+focus_mode = 0
+text = "?"
+script = ExtResource("4_qmark")
+tooltip_key = "learn"
 
 [node name="Portfolio View" type="PanelContainer" parent="GameWindow/TabContainer"]
 visible = false
@@ -206,8 +280,8 @@ text = "Quarter 1 of 4"
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/StockSelector/AAPLButton" to="." method="select_stock" binds= ["AAPL"]]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/StockSelector/MSFTButton" to="." method="select_stock" binds= ["MSFT"]]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/StockSelector/TSLAButton" to="." method="select_stock" binds= ["TSLA"]]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButton" to="." method="buy_stock"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/SellButton" to="." method="sell_stock"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButton" to="." method="hold_stock"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButton" to="." method="advance_quarter"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButton" to="." method="show_tutorial_menu"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButtonWrapper/BuyButton" to="." method="buy_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/SellButtonWrapper/SellButton" to="." method="sell_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButtonWrapper/HoldButton" to="." method="hold_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButtonWrapper/NextQuarterButton" to="." method="advance_quarter"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButtonWrapper/LearnButton" to="." method="show_tutorial_menu"]

@@ -251,7 +251,4 @@ class Game_manager(Node):
 			self.add_child(menu)
 			menu.popup_centered()
 			print(" Tutorial menu shown")
-		except Exception as e:
-			print(f" Tutorial menu error: {e}")
-			import traceback
-			traceback.print_exc()
+		exce
