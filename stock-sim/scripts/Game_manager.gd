@@ -6,6 +6,8 @@ var current_quarter: int = 0
 var max_quarters: int = 4
 var current_stock: String = "AAPL"  # Currently selected stock
 var stocks_owned: Dictionary = {"AAPL": 0, "MSFT": 0, "TSLA": 0}
+var buy_price: Dictionary = {"AAPL": 0.0, "MSFT": 0.0, "TSLA": 0.0}
+var total_spent: Dictionary = {"AAPL": 0.0, "MSFT": 0.0, "TSLA": 0.0}
 # Stock prices for each quarter with full OHLC data
 # Format: {"ticker": [[Q1 candles], [Q2 candles], [Q3 candles], [Q4 candles]]}
 # Each quarter contains multiple weekly candlesticks {open, high, low, close}
@@ -267,10 +269,25 @@ func update_portfolio_view():
 		var holdings_text = ""
 		for ticker in ["AAPL", "MSFT", "TSLA"]:
 			if stocks_owned[ticker] > 0:
+
+				# Get Price
 				var quarter_candles = stock_prices[ticker][current_quarter]
 				var current_price = quarter_candles[-1]["close"]
 				var value = stocks_owned[ticker] * current_price
-				holdings_text += "%s: %d shares ($%.2f)\n" % [ticker, stocks_owned[ticker], value]
+
+				# Avg Price Calculation
+				var avg_price = 0.0
+				if stocks_owned[ticker] > 0:
+					avg_price = total_spent[ticker] / stocks_owned[ticker]
+
+				# Add Line Output Text
+				holdings_text += "%s: %d shares ($%.2f)\n  Avg Buy Price: $%.2f\n" % [
+					ticker,
+					stocks_owned[ticker],
+					value,
+					avg_price
+				]
+
 		if holdings_text == "":
 			holdings_text = "No stocks owned"
 		stock_value_label.set_text(holdings_text.strip_edges())
@@ -348,7 +365,15 @@ func execute_buy(ticker: String, shares: int):
 	
 	if cash >= total_cost:
 		cash -= total_cost
+		# Update total spent and shares
+		total_spent[ticker] += total_cost
+
+		# Update shares owned
 		stocks_owned[ticker] += shares
+
+		# Compute new average buy price
+		buy_price[ticker] = total_spent[ticker] / stocks_owned[ticker]
+
 		update_display()
 	else:
 		var label = find_child("StockPrice", true, false)
@@ -356,19 +381,35 @@ func execute_buy(ticker: String, shares: int):
 			label.set_text("NOT ENOUGH CASH!\nNeed: $%.2f\nHave: $%.2f" % [total_cost, cash])
 
 func execute_sell(ticker: String, shares: int):
-	"""Actually execute the sell"""
 	print("Sell clicked: ", ticker, " x", shares)
+
 	if stocks_owned[ticker] >= shares:
 		var quarter_candles = stock_prices[ticker][current_quarter]
 		var current_price = quarter_candles[-1]["close"]
 		var total_value = current_price * shares
-		cash += total_value
+		
+		# --- IMPORTANT: Adjust cost basis ---
+		var old_shares = stocks_owned[ticker]
+		var proportion = float(shares) / float(old_shares)
+		total_spent[ticker] -= total_spent[ticker] * proportion
+
+		# Update shares + cash
 		stocks_owned[ticker] -= shares
+		cash += total_value
+
+		# Recalculate average
+		if stocks_owned[ticker] > 0:
+			buy_price[ticker] = total_spent[ticker] / stocks_owned[ticker]
+		else:
+			buy_price[ticker] = 0.0
+			total_spent[ticker] = 0.0
+
 		update_display()
 	else:
 		var label = find_child("StockPrice", true, false)
 		if label:
 			label.set_text("DON'T OWN ENOUGH!\nHave: %d shares\nNeed: %d" % [stocks_owned[ticker], shares])
+
 
 func hold_stock():
 	print("Hold clicked")
