@@ -143,7 +143,7 @@ var tutorials: Dictionary = {
 	},
 	"diversification": {
 		"title": "Portfolio Diversification",
-		"content": "Diversifying your portfolio helps protect you from big losses.\nInstead of relying on one stock, spread your investments across different companies.\n\nWhy diversify?\n• Reduces risk if one stock crashes\n• Balances stable and high-risk stocks\n• Creates more consistent long-term performance\n\nIn this simulator, you can diversify using AAPL, MSFT, and TSLA."
+		"content": "Diversification protects your portfolio from unexpected swings. Instead of putting all your money into a\nsingle stock, spreading your investments reduces the impact of sudden price drops.\n\nWhy diversify?\n• Reduces risk by balancing losses in one stock with gains in another\n• Smooths performance since different stocks rarely move the same way\n• Helps during uncertainty when market direction is unclear\n\nHow to diversify in this simulator:\nYou have three different stocks available. Investing in more than one creates a more balanced portfolio,\nespecially as trends shift quarter to quarter.\n\nTip: Even if a stock looks strong now, markets can change quickly. Diversification gives you a safety net."
 	},
 	"quarter_strategy": {
 		"title": "Quarter-by-Quarter Strategy",
