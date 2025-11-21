@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add scripts directory to path
+scripts_dir = os.path.join(os.path.dirname(__file__), "..", "scripts")
+sys.path.insert(0, scripts_dir)
+
 from Stock import Stock
 from Portfolio import Portfolio
 

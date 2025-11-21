@@ -1,4 +1,3 @@
-
 from py4godot.classes import gdclass
 from py4godot.classes.Node import Node
 

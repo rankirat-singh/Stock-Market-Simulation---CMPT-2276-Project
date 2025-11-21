@@ -1,3 +1,10 @@
+import sys
+import os
+
+# Add scripts directory to path
+scripts_dir = os.path.join(os.path.dirname(__file__), "..", "scripts")
+sys.path.insert(0, scripts_dir)
+
 from Stock import Stock
 from Portfolio import Portfolio
 
@@ -19,7 +26,7 @@ apple.advance_quarter()
 print(f"Q2 Price: ${apple.get_current_price()}")
 print(f"Change: {apple.get_trend_symbol()} {apple.get_price_change_percent()}%")
 
-print("\n" + "="*50)
+print("\n" + "=" * 50)
 print("Creating portfolio...")
 portfolio = Portfolio(10000)
 print(f"Starting cash: ${portfolio.cash}")
@@ -35,4 +42,4 @@ else:
 stocks_dict = {'AAPL': apple}
 print(f"\nPortfolio value: ${portfolio.get_total_value(stocks_dict)}")
 
-print("\n✅ All tests passed!")
+print("\nAll tests passed!")
