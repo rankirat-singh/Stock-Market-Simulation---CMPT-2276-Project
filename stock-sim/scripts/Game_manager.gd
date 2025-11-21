@@ -131,23 +131,23 @@ var stock_names: Dictionary = {
 var tutorials: Dictionary = {
 	"welcome": {
 		"title": "Welcome to Stock Trading Simulator!",
-		"content": "You start with $10,000 cash and have 4 quarters to grow your portfolio.\n\nYour goal: Make smart trades to maximize your profit!\n\n• Buy stocks when prices are low\n• Sell when prices are high\n• Use Hold to skip a quarter\n• Watch the candlestick chart for trends"
+		"content": "You begin with $10,000 in cash and four decision points—one per quarter of the fiscal\nyear—to build your portfolio.\n\nYour mission: use chart data and smart timing to maximize profit.\n\nYour toolkit:\n• Buy when the stock shows strength or when the price dips\n• Sell when momentum slows or prices reach a peak\n• Hold if the market is unclear or you expect a future rise\n• Candlestick charts show price movement, trends, and reversals—use them to predict what\n   might come next\n\nPro tip: Look for patterns such as rising highs, falling lows, or even sudden spikes.\n              These help you decide whether a stock is gaining momentum or losing it."
 	},
 	"sma": {
 		"title": "Understanding Market Trends",
-		"content": "The Simple Moving Average (SMA) helps identify trends:\n\n• Green candlesticks = Price went UP\n• Red candlesticks = Price went DOWN\n• Tall candles = Big price changes\n• Small candles = Stable prices\n\nLook for patterns to predict future moves!"
+		"content": "Trends help you understand where a stock is heading. The Simple Moving Average (SMA)\nsmooths out price changes so you can spot direction more easily.\n\nCandlestick basics:\n• Green candles = price increased\n• Red candles = price decreased\n• Tall candles = strong volatility\n• Short candles = stable prices\n\nTip: A rising SMA or a series of higher highs can signal upward momentum, while falling\npatterns may hint at a decline."
 	},
 	"sentiment": {
 		"title": "Market Sentiment Analysis",
-		"content": "Market sentiment affects stock prices:\n\n• High Sentiment (0.7-1.0) = Bullish (prices likely to rise)\n• Medium Sentiment (0.4-0.6) = Neutral\n• Low Sentiment (0.0-0.3) = Bearish (prices likely to fall)\n\nCheck the news to gauge sentiment!"
+		"content": "Market sentiment reflects how investors feel about a stock. High confidence often drives\nprices up, while fear can push them down.\n\nSentiment scale:\n• High (0.7–1.0): Bullish — prices more likely to rise\n• Medium (0.4–0.6): Neutral — uncertain or sideways movement\n• Low (0.0–0.3): Bearish — prices more likely to fall\n\nTip: Sentiment reacts to news, earnings, and market events. Keep an eye on what's\n        happening to anticipate price swings."
 	},
 	"diversification": {
 		"title": "Portfolio Diversification",
-		"content": "Don't put all your eggs in one basket!\n\n• Spread investments across multiple stocks\n• Reduces risk if one stock crashes\n• Balances high-risk and stable stocks\n\nYou have AAPL, MSFT, and TSLA available."
+		"content": "Diversifying your portfolio helps protect you from big losses.\nInstead of relying on one stock, spread your investments across different companies.\n\nWhy diversify?\n• Reduces risk if one stock crashes\n• Balances stable and high-risk stocks\n• Creates more consistent long-term performance\n\nIn this simulator, you can diversify using AAPL, MSFT, and TSLA."
 	},
 	"quarter_strategy": {
 		"title": "Quarter-by-Quarter Strategy",
-		"content": "Plan your moves across 4 quarters:\n\n• Q1: Research and buy promising stocks\n• Q2-Q3: Monitor trends, adjust holdings\n• Q4: Sell for maximum profit\n\nUse the Hold button if you want to wait!"
+		"content": "Plan your moves across all 4 quarters to maximize profit. Each quarter gives\nyou a chance to buy, sell, or wait based on market movement.\n\nQuarter flow:\n• Q1: Research and buy promising stocks\n• Q2–Q3: Monitor trends and adjust holdings\n• Q4: Sell to secure profits before year-end\n• Use Hold when you're unsure or waiting for a better price\n\nCommon simple strategies:\n• Buy the Dip: Buy when prices fall, expecting a rebound\n• Trend Following: Hold or buy more when a stock keeps rising\n• Take Profits Early: Sell once you're up instead of waiting for the peak\n• Risk Balancing: Mix a safer stock with a riskier one to reduce losses"
 	}
 }
 
