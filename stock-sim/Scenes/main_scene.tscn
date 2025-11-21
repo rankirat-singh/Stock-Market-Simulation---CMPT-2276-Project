@@ -33,9 +33,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Stock View" type="VBoxContainer" parent="GameWindow/TabContainer"]
+visible = false
 layout_mode = 2
 alignment = 1
 metadata/_tab_index = 0
@@ -214,7 +215,6 @@ script = ExtResource("4_qmark")
 tooltip_key = "learn"
 
 [node name="Portfolio View" type="PanelContainer" parent="GameWindow/TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_2ia5b")
 metadata/_tab_index = 1
