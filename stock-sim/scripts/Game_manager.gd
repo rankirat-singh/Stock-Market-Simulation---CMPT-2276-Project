@@ -294,7 +294,7 @@ func update_display():
 		# Get the last candlestick's close price from current quarter
 		var quarter_candles = stock_prices[current_stock][current_quarter]
 		var current_price = quarter_candles[-1]["close"]
-		label.set_text("Cash: $%.2f\nPrice: $%.2f | Owned: %d\nQ%d/%d" % [cash, current_price, stocks_owned[current_stock], current_quarter + 1, max_quarters])
+		label.set_text("%.2f USD" % current_price)
 	
 	# Update Data Panel
 	var sma_label = find_child("Value_SMA", true, false)
@@ -316,6 +316,14 @@ func update_display():
 			sent_label.set_text("%.2f" % stock_sentiment[current_stock][current_quarter])
 		else:
 			sent_label.set_text("0.50")
+
+	var avg_price_label = find_child("Value_AvgPrice", true, false)
+	if avg_price_label:
+		if stocks_owned[current_stock] > 0:
+			var avg_price = total_spent[current_stock] / stocks_owned[current_stock]
+			avg_price_label.set_text("$%.2f" % avg_price)
+		else:
+			avg_price_label.set_text("--")
 
 	# Update Portfolio View
 	update_portfolio_view()

@@ -15,6 +15,15 @@ content_margin_bottom = 10.0
 script = ExtResource("1_gd")
 
 [node name="GameWindow" type="CanvasLayer" parent="."]
+color = Color(0.0745098, 0.0901961, 0.133333, 1)
+
+[node name="Background" type="ColorRect" parent="GameWindow"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0745098, 0.0901961, 0.133333, 1)
 
 [node name="TooltipManager" type="Control" parent="GameWindow"]
 z_index = 1000
@@ -41,165 +50,191 @@ layout_mode = 2
 alignment = 1
 metadata/_tab_index = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_constants/separation = 50
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
-custom_minimum_size = Vector2(250, 0)
+[node name="HeaderPanel" type="PanelContainer" parent="GameWindow/TabContainer/Stock View"]
 layout_mode = 2
 
-[node name="StockName" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="GameWindow/TabContainer/Stock View/HeaderPanel"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Apple"
-clip_text = true
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
 
-[node name="StockCode" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer/VBoxContainer"]
+[node name="HeaderHBox" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/HeaderPanel/MarginContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+
+[node name="InfoVBox" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/HeaderPanel/MarginContainer/HeaderHBox"]
+layout_mode = 2
+
+[node name="StockCode" type="Label" parent="GameWindow/TabContainer/Stock View/HeaderPanel/MarginContainer/HeaderHBox/InfoVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "AAPL"
 
-[node name="StockPrice" type="Label" parent="GameWindow/TabContainer/Stock View/HBoxContainer"]
-custom_minimum_size = Vector2(900, 0)
+[node name="StockName" type="Label" parent="GameWindow/TabContainer/Stock View/HeaderPanel/MarginContainer/HeaderHBox/InfoVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.698039, 0.698039, 0.698039, 1)
+theme_override_font_sizes/font_size = 18
+text = "Apple Inc."
+
+[node name="Spacer" type="Control" parent="GameWindow/TabContainer/Stock View/HeaderPanel/MarginContainer/HeaderHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_font_sizes/font_size = 50
-text = "258.54USD"
-autowrap_mode = 1
 
-[node name="StockSelector" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
+[node name="StockPrice" type="Label" parent="GameWindow/TabContainer/Stock View/HeaderPanel/MarginContainer/HeaderHBox"]
 layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 1
+theme_override_font_sizes/font_size = 40
+text = "258.54 USD"
 
-[node name="AAPLButton" type="Button" parent="GameWindow/TabContainer/Stock View/StockSelector"]
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 20
-text = "AAPL"
-
-[node name="MSFTButton" type="Button" parent="GameWindow/TabContainer/Stock View/StockSelector"]
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 20
-text = "MSFT"
-
-[node name="TSLAButton" type="Button" parent="GameWindow/TabContainer/Stock View/StockSelector"]
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 20
-text = "TSLA"
-
-[node name="ContentContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
+[node name="BodyHBox" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GraphContainer" type="PanelContainer" parent="GameWindow/TabContainer/Stock View/ContentContainer"]
+[node name="ChartPanel" type="PanelContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
 
-[node name="CandlestickChart" type="Control" parent="GameWindow/TabContainer/Stock View/ContentContainer/GraphContainer"]
+[node name="CandlestickChart" type="Control" parent="GameWindow/TabContainer/Stock View/BodyHBox/ChartPanel"]
 custom_minimum_size = Vector2(800, 400)
 layout_mode = 2
 script = ExtResource("2_pw63i")
 
-[node name="X-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/ContentContainer/GraphContainer"]
+[node name="X-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/BodyHBox/ChartPanel"]
 position = Vector2(75, 405)
 points = PackedVector2Array(0, 0, 1050, 0)
 width = 2.0
 default_color = Color(0.23529412, 0.23529412, 0.23529412, 1)
 
-[node name="Y-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/ContentContainer/GraphContainer"]
+[node name="Y-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/BodyHBox/ChartPanel"]
 position = Vector2(75, 25)
 points = PackedVector2Array(0, 0, 0, 380)
 width = 2.0
 default_color = Color(0.23392558, 0.2339254, 0.23392552, 1)
 
-[node name="DataPanel" type="PanelContainer" parent="GameWindow/TabContainer/Stock View/ContentContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel"]
+[node name="SidebarPanel" type="PanelContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
-[node name="Label_Metrics" type="Label" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer"]
-layout_mode = 2
-text = "Key Metrics"
-horizontal_alignment = 1
-
-[node name="HSeparator" type="HSeparator" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer"]
-layout_mode = 2
-
-[node name="GridContainer" type="GridContainer" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer"]
-layout_mode = 2
-columns = 2
-
-[node name="Label_SMA" type="Label" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "SMA (3Q):"
-
-[node name="Value_SMA" type="Label" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "--"
-
-[node name="Label_Vol" type="Label" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Volatility:"
-
-[node name="Value_Vol" type="Label" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "--"
-
-[node name="Label_Sent" type="Label" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "Sentiment:"
-
-[node name="Value_Sent" type="Label" parent="GameWindow/TabContainer/Stock View/ContentContainer/DataPanel/VBoxContainer/GridContainer"]
-layout_mode = 2
-text = "--"
-
-[node name="ButtonContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View"]
+[node name="SidebarVBox" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="BuyButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="WatchlistLabel" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 5
+text = "WATCHLIST"
+horizontal_alignment = 1
 
-[node name="BuyButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButtonWrapper"]
+[node name="StockSelector" type="GridContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+columns = 3
+
+[node name="AAPLButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-theme_override_font_sizes/font_size = 35
+text = "AAPL"
+
+[node name="MSFTButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "MSFT"
+
+[node name="TSLAButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "TSLA"
+
+[node name="HSeparator1" type="HSeparator" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+
+[node name="DataPanel" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+
+[node name="Label_Metrics" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel"]
+layout_mode = 2
+text = "KEY METRICS"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel"]
+layout_mode = 2
+columns = 2
+
+[node name="Label_SMA" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "SMA (3Q):"
+
+[node name="Value_SMA" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_Vol" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "Volatility:"
+
+[node name="Value_Vol" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_Sent" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "Sentiment:"
+
+[node name="Value_Sent" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_AvgPrice" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "Avg Buy Price:"
+
+[node name="Value_AvgPrice" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="HSeparator2" type="HSeparator" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+
+[node name="OrderEntryLabel" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+text = "ORDER ENTRY"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BuyButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="BuyButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/BuyButtonWrapper"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
 text = "Buy"
 
-[node name="BuyQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButtonWrapper"]
+[node name="BuyQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/BuyButtonWrapper"]
 layout_mode = 2
 focus_mode = 0
 text = "?"
 script = ExtResource("4_qmark")
 tooltip_key = "buy"
 
-[node name="SellButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="SellButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
-[node name="SellButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/SellButtonWrapper"]
+[node name="SellButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/SellButtonWrapper"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-theme_override_font_sizes/font_size = 35
+theme_override_font_sizes/font_size = 20
 text = "Sell"
 
-[node name="SellQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/SellButtonWrapper"]
+[node name="SellQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/SellButtonWrapper"]
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
@@ -207,35 +242,34 @@ text = "?"
 script = ExtResource("4_qmark")
 tooltip_key = "sell"
 
-[node name="HoldButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="HoldButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
-[node name="HoldButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButtonWrapper"]
+[node name="HoldButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/HoldButtonWrapper"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-theme_override_font_sizes/font_size = 35
+theme_override_font_sizes/font_size = 20
 text = "Hold"
 
-[node name="HoldQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButtonWrapper"]
+[node name="HoldQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/HoldButtonWrapper"]
 layout_mode = 2
 focus_mode = 0
 text = "?"
 script = ExtResource("4_qmark")
 tooltip_key = "hold"
 
-[node name="NextQuarterButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="NextQuarterButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="NextQuarterButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButtonWrapper"]
+[node name="NextQuarterButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/NextQuarterButtonWrapper"]
 layout_mode = 2
 focus_mode = 0
 text = "Next Quarter"
 
-[node name="NextQuarterQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButtonWrapper"]
+[node name="NextQuarterQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/NextQuarterButtonWrapper"]
 layout_mode = 2
 tooltip_text = "Move to next quater"
 focus_mode = 0
@@ -244,17 +278,17 @@ text = "?"
 script = ExtResource("4_qmark")
 tooltip_key = "next_quarter"
 
-[node name="LearnButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/ButtonContainer"]
+[node name="LearnButtonWrapper" type="HBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="LearnButton" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButtonWrapper"]
+[node name="LearnButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/LearnButtonWrapper"]
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
 text = " Learn"
 
-[node name="LearnQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButtonWrapper"]
+[node name="LearnQuestionMark" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/LearnButtonWrapper"]
 layout_mode = 2
 tooltip_text = "Instruction"
 focus_mode = 0
@@ -262,58 +296,69 @@ text = "?"
 script = ExtResource("4_qmark")
 tooltip_key = "learn"
 
-[node name="Portfolio View" type="PanelContainer" parent="GameWindow/TabContainer"]
+[node name="Portfolio View" type="VBoxContainer" parent="GameWindow/TabContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_2ia5b")
+theme_override_constants/separation = 20
 metadata/_tab_index = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameWindow/TabContainer/Portfolio View"]
+[node name="Header" type="HBoxContainer" parent="GameWindow/TabContainer/Portfolio View"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer"]
+[node name="Username" type="Label" parent="GameWindow/TabContainer/Portfolio View/Header"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "My Portfolio"
+
+[node name="SummaryCards" type="HBoxContainer" parent="GameWindow/TabContainer/Portfolio View"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Card_Value" type="PanelContainer" parent="GameWindow/TabContainer/Portfolio View/SummaryCards"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
 
-[node name="Username" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+[node name="VBox" type="VBoxContainer" parent="GameWindow/TabContainer/Portfolio View/SummaryCards/Card_Value"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "User
-"
 
-[node name="CashHoldingsLabel" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="GameWindow/TabContainer/Portfolio View/SummaryCards/Card_Value/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 35
-text = "Cash Holdings:"
+text = "TOTAL VALUE"
 
-[node name="CashHoldingsValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+[node name="PortfolioValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/SummaryCards/Card_Value/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "0.0 USD"
+text = "$10,000.00"
 
-[node name="StockHoldingsLabel" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+[node name="Card_Cash" type="PanelContainer" parent="GameWindow/TabContainer/Portfolio View/SummaryCards"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 35
-text = "Stock Holdings:"
+size_flags_horizontal = 3
 
-[node name="StockHoldingsValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer"]
+[node name="VBox" type="VBoxContainer" parent="GameWindow/TabContainer/Portfolio View/SummaryCards/Card_Cash"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GameWindow/TabContainer/Portfolio View/SummaryCards/Card_Cash/VBox"]
+layout_mode = 2
+text = "CASH AVAILABLE"
+
+[node name="CashHoldingsValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/SummaryCards/Card_Cash/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "AAPL 0.0 USD"
+text = "$10,000.00"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer"]
+[node name="HoldingsPanel" type="PanelContainer" parent="GameWindow/TabContainer/Portfolio View"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="GameWindow/TabContainer/Portfolio View/HoldingsPanel"]
 layout_mode = 2
 
-[node name="PortfolioValueLabel" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer2"]
+[node name="Label" type="Label" parent="GameWindow/TabContainer/Portfolio View/HoldingsPanel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 50
-text = "Total Portfolio Value:"
+text = "HOLDINGS"
 
-[node name="PortfolioValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/HBoxContainer/VBoxContainer2"]
+[node name="StockHoldingsValue" type="Label" parent="GameWindow/TabContainer/Portfolio View/HoldingsPanel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 45
-text = "0.0 USD"
-horizontal_alignment = 1
+text = "No stocks owned"
 
 [node name="QuarterLabel" type="Label" parent="GameWindow"]
 custom_minimum_size = Vector2(50, 50)
@@ -325,11 +370,11 @@ offset_bottom = 50.0
 grow_horizontal = 0
 text = "Quarter 1 of 4"
 
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/StockSelector/AAPLButton" to="." method="select_stock" binds= ["AAPL"]]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/StockSelector/MSFTButton" to="." method="select_stock" binds= ["MSFT"]]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/StockSelector/TSLAButton" to="." method="select_stock" binds= ["TSLA"]]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/BuyButtonWrapper/BuyButton" to="." method="buy_stock"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/SellButtonWrapper/SellButton" to="." method="sell_stock"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/HoldButtonWrapper/HoldButton" to="." method="hold_stock"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/NextQuarterButtonWrapper/NextQuarterButton" to="." method="advance_quarter"]
-[connection signal="pressed" from="GameWindow/TabContainer/Stock View/ButtonContainer/LearnButtonWrapper/LearnButton" to="." method="show_tutorial_menu"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/AAPLButton" to="." method="select_stock" binds= ["AAPL"]]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/MSFTButton" to="." method="select_stock" binds= ["MSFT"]]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/TSLAButton" to="." method="select_stock" binds= ["TSLA"]]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/BuyButtonWrapper/BuyButton" to="." method="buy_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/SellButtonWrapper/SellButton" to="." method="sell_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/HoldButtonWrapper/HoldButton" to="." method="hold_stock"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/NextQuarterButtonWrapper/NextQuarterButton" to="." method="advance_quarter"]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/LearnButtonWrapper/LearnButton" to="." method="show_tutorial_menu"]
