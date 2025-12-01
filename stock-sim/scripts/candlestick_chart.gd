@@ -17,6 +17,9 @@ var color_grid = Color(0.3, 0.3, 0.3)
 var color_text = Color(0.9, 0.9, 0.9)
 
 func _ready():
+	# Connect resized signal to redraw
+	resized.connect(queue_redraw)
+	
 	# Example data - will be replaced by real stock data
 	price_data = [
 		{"open": 150.0, "high": 155.0, "low": 148.0, "close": 152.0},

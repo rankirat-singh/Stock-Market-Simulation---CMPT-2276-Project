@@ -1,0 +1,7 @@
+# User specific files
+secrets.json
+.DS_Store
+
+# Godot
+.godot/
+*.translation

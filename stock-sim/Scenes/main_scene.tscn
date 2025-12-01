@@ -1,21 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://t33xx3viqu2q"]
+[gd_scene load_steps=5 format=3 uid="uid://t33xx3viqu2q"]
 
 [ext_resource type="Script" uid="uid://n3v6ed63cws0" path="res://scripts/Game_manager.gd" id="1_gd"]
 [ext_resource type="Script" uid="uid://dxn6gcn4b3wnq" path="res://scripts/candlestick_chart.gd" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://c2pftawpa05ox" path="res://scripts/tooltip.gd" id="3_tooltip"]
 [ext_resource type="Script" uid="uid://7fnawxf4ei64" path="res://scripts/question_mark_button.gd" id="4_qmark"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ia5b"]
-content_margin_left = 10.0
-content_margin_top = 10.0
-content_margin_right = 10.0
-content_margin_bottom = 10.0
-
 [node name="MainScene" type="Node2D"]
 script = ExtResource("1_gd")
 
 [node name="GameWindow" type="CanvasLayer" parent="."]
-color = Color(0.0745098, 0.0901961, 0.133333, 1)
 
 [node name="Background" type="ColorRect" parent="GameWindow"]
 anchors_preset = 15
@@ -42,10 +35,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Stock View" type="VBoxContainer" parent="GameWindow/TabContainer"]
-visible = false
 layout_mode = 2
 alignment = 1
 metadata/_tab_index = 0
@@ -95,7 +87,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CandlestickChart" type="Control" parent="GameWindow/TabContainer/Stock View/BodyHBox/ChartPanel"]
-custom_minimum_size = Vector2(800, 400)
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 script = ExtResource("2_pw63i")
 
@@ -111,12 +103,14 @@ points = PackedVector2Array(0, 0, 0, 380)
 width = 2.0
 default_color = Color(0.23392558, 0.2339254, 0.23392552, 1)
 
-[node name="SidebarPanel" type="PanelContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox"]
+[node name="SidebarPanel" type="ScrollContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+horizontal_scroll_mode = 0
 
 [node name="SidebarVBox" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 20
 
 [node name="WatchlistLabel" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
@@ -145,6 +139,24 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "TSLA"
+
+[node name="GOOGLButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "GOOGL"
+
+[node name="AMZNButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "AMZN"
+
+[node name="NVDAButton" type="Button" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "NVDA"
 
 [node name="HSeparator1" type="HSeparator" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
 layout_mode = 2
@@ -192,6 +204,78 @@ text = "Avg Buy Price:"
 [node name="Value_AvgPrice" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
 layout_mode = 2
 text = "--"
+
+[node name="Label_RSI" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "RSI (14):"
+
+[node name="Value_RSI" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_Volume" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "Volume:"
+
+[node name="Value_Volume" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/DataPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="HSeparator_Company" type="HSeparator" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+
+[node name="CompanyInfoPanel" type="VBoxContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
+layout_mode = 2
+
+[node name="Label_Company" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel"]
+layout_mode = 2
+text = "COMPANY INFO"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel"]
+layout_mode = 2
+columns = 2
+
+[node name="Label_Sector" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "Sector:"
+
+[node name="Value_Sector" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_Industry" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "Industry:"
+
+[node name="Value_Industry" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_MktCap" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "Mkt Cap:"
+
+[node name="Value_MktCap" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_PE" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "P/E Ratio:"
+
+[node name="Value_PE" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel/GridContainer"]
+layout_mode = 2
+text = "--"
+
+[node name="Label_Desc" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel"]
+layout_mode = 2
+text = "Description:"
+
+[node name="Value_Desc" type="Label" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/CompanyInfoPanel"]
+layout_mode = 2
+text = "--"
+autowrap_mode = 3
 
 [node name="HSeparator2" type="HSeparator" parent="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox"]
 layout_mode = 2
@@ -297,6 +381,7 @@ script = ExtResource("4_qmark")
 tooltip_key = "learn"
 
 [node name="Portfolio View" type="VBoxContainer" parent="GameWindow/TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 20
 metadata/_tab_index = 1
@@ -373,6 +458,9 @@ text = "Quarter 1 of 4"
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/AAPLButton" to="." method="select_stock" binds= ["AAPL"]]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/MSFTButton" to="." method="select_stock" binds= ["MSFT"]]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/TSLAButton" to="." method="select_stock" binds= ["TSLA"]]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/GOOGLButton" to="." method="select_stock" binds= ["GOOGL"]]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/AMZNButton" to="." method="select_stock" binds= ["AMZN"]]
+[connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/StockSelector/NVDAButton" to="." method="select_stock" binds= ["NVDA"]]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/BuyButtonWrapper/BuyButton" to="." method="buy_stock"]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/SellButtonWrapper/SellButton" to="." method="sell_stock"]
 [connection signal="pressed" from="GameWindow/TabContainer/Stock View/BodyHBox/SidebarPanel/SidebarVBox/ButtonContainer/HoldButtonWrapper/HoldButton" to="." method="hold_stock"]

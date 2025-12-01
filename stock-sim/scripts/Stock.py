@@ -83,6 +83,47 @@ class Stock:
         variance = sum([((x - mean) ** 2) for x in prices]) / len(prices)
         return variance ** 0.5
 
+    def get_rsi(self, period=14):
+        """Calculate Relative Strength Index"""
+        prices = self.price_history[:self.current_quarter+1]
+        if len(prices) < period + 1:
+            return 50.0 # Default neutral value if not enough data
+            
+        gains = []
+        losses = []
+        
+        for i in range(1, len(prices)):
+            change = prices[i] - prices[i-1]
+            if change > 0:
+                gains.append(change)
+                losses.append(0)
+            else:
+                gains.append(0)
+                losses.append(abs(change))
+                
+        # Simple average for the first step (simplified RSI)
+        avg_gain = sum(gains[-period:]) / period
+        avg_loss = sum(losses[-period:]) / period
+        
+        if avg_loss == 0:
+            return 100.0
+            
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
+        return rsi
+
+    def get_volume(self):
+        """Get trading volume for current quarter"""
+        # Mock volume calculation based on price movement
+        # In a real app, this would come from data
+        price = self.get_current_price()
+        change = abs(self.get_price_change_percent())
+        base_volume = 1000000
+        
+        # Higher volume on higher volatility
+        volume = base_volume * (1 + (change / 10))
+        return int(volume)
+
     def __str__(self):
         """String represenation for degguging"""
         return f"{self.ticker}: ${self.get_current_price()} ({self.get_trend_symbol()} {self.get_price_change_percent()}%)"
