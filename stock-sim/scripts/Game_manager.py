@@ -22,6 +22,7 @@ class Game_manager(Node):
 	# Game state properties
 	current_quarter: int = 0
 	max_quarters: int = 4
+	current_stock_ticker: str = "AAPL"
 	
 	def _ready(self) -> None:
 		"""Initialize game when scene loads"""
@@ -282,21 +283,13 @@ class Game_manager(Node):
 		}
 	
 	def update_chart_for_stock(self, ticker: str = "AAPL"):
-		"""Update the candlestick chart to show a specific stock"""
-		root = self.get_parent()
-		if not root:
-			return
-		
-		try:
-			chart = root.find_child("CandlestickChart", True, False)
-			if chart and ticker in self.stocks:
-				stock = self.stocks[ticker]
-				chart.call("set_stock_data", stock.price_history)
-				print(f" Updated chart to show {ticker}")
-			else:
-				print(f" Chart or stock {ticker} not found")
-		except Exception as e:
-			print(f"Error updating chart: {e}")
+		"""Update the UI to show a specific stock"""
+		if ticker in self.stocks:
+			self.current_stock_ticker = ticker
+			self._update_ui()
+			print(f" Switched view to {ticker}")
+		else:
+			print(f" Stock {ticker} not found")
 	
 	
 	@private
@@ -311,36 +304,60 @@ class Game_manager(Node):
 				print("⚠ No parent node found")
 				return
 			
-			print(f"✓ Root node: {root.get_name()}")
+			current_stock = self.stocks[self.current_stock_ticker]
 			
 			# Update candlestick chart if it exists
 			try:
 				chart = root.find_child("CandlestickChart", True, False)
 				if chart and chart.has_method("set_stock_data"):
-					apple_stock = self.stocks["AAPL"]
-					chart.call("set_stock_data", apple_stock.price_history)
-					print("✅ Updated candlestick chart")
-				else:
-					print("⚠ CandlestickChart not found or missing method")
+					chart.call("set_stock_data", current_stock.price_history)
+					print(f"✅ Updated candlestick chart for {self.current_stock_ticker}")
 			except Exception as e:
 				print(f"⚠ Chart update failed: {e}")
 			
-			# Update Stock View - Stock Price Display
+			# Update Stock View
 			try:
 				stock_view = root.find_child("Stock View", True, False)
 				if stock_view:
-					print(f"✓ Found Stock View")
+					# Update Name and Code
+					name_label = stock_view.find_child("StockName", True, False)
+					if name_label:
+						name_label.set_text(current_stock.name)
+						
+					code_label = stock_view.find_child("StockCode", True, False)
+					if code_label:
+						code_label.set_text(current_stock.ticker)
+
+					# Update Price
 					stock_price_label = stock_view.find_child("StockPrice", True, False)
 					if stock_price_label:
-						apple_stock = self.stocks["AAPL"]
-						current_price = apple_stock.get_current_price()
+						current_price = current_stock.get_current_price()
 						stock_price_label.set_text(f"{current_price:.2f}USD")
-						print(f"✓ Updated price to: ${current_price:.2f}")
-					else:
-						print("⚠ Could not find StockPrice label")
-				else:
-					print("⚠ Could not find Stock View")
+						
+					# Update Data Panel
+					sma_label = stock_view.find_child("Value_SMA", True, False)
+					if sma_label:
+						sma = current_stock.get_sma(3)
+						text = f"${sma:.2f}" if sma else "N/A"
+						sma_label.set_text(text)
+						
+					vol_label = stock_view.find_child("Value_Vol", True, False)
+					if vol_label:
+						vol = current_stock.get_volatility()
+						vol_label.set_text(f"{vol:.2f}")
+						
+					sent_label = stock_view.find_child("Value_Sent", True, False)
+					if sent_label:
+						sent = current_stock.get_current_sentiment()
+						sent_label.set_text(f"{sent:.2f}")
+						
+					print(f"✓ Updated Stock View for {self.current_stock_ticker}")
 			except Exception as e:
 				print(f"⚠ Error updating Stock View: {e}")
 			
-			print("
+			print("=== _update_ui() complete ===")
+		
+		except Exception as e:
+			print(f" ERROR in _update_ui(): {e}")
+			import traceback
+			traceback.print_exc()

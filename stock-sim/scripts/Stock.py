@@ -61,6 +61,28 @@ class Stock:
         else:
             return "FLAT"
 
+    def get_sma(self, period=3):
+        """Calculate Simple Moving Average for the given period"""
+        if self.current_quarter + 1 < period:
+            return None
+        
+        prices = self.price_history[:self.current_quarter+1]
+        if len(prices) < period:
+            return None
+            
+        recent_prices = prices[-period:]
+        return sum(recent_prices) / period
+
+    def get_volatility(self):
+        """Calculate volatility (standard deviation) of prices seen so far"""
+        prices = self.price_history[:self.current_quarter+1]
+        if len(prices) < 2:
+            return 0.0
+            
+        mean = sum(prices) / len(prices)
+        variance = sum([((x - mean) ** 2) for x in prices]) / len(prices)
+        return variance ** 0.5
+
     def __str__(self):
         """String represenation for degguging"""
         return f"{self.ticker}: ${self.get_current_price()} ({self.get_trend_symbol()} {self.get_price_change_percent()}%)"

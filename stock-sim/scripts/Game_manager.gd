@@ -8,6 +8,11 @@ var current_stock: String = "AAPL"  # Currently selected stock
 var stocks_owned: Dictionary = {"AAPL": 0, "MSFT": 0, "TSLA": 0}
 var buy_price: Dictionary = {"AAPL": 0.0, "MSFT": 0.0, "TSLA": 0.0}
 var total_spent: Dictionary = {"AAPL": 0.0, "MSFT": 0.0, "TSLA": 0.0}
+var stock_sentiment = {
+	"AAPL": [0.8, 0.9, 0.3, 0.95],
+	"MSFT": [0.7, 0.4, 0.85, 0.9],
+	"TSLA": [0.6, 0.8, 0.9, 0.5]
+}
 # Stock prices for each quarter with full OHLC data
 # Format: {"ticker": [[Q1 candles], [Q2 candles], [Q3 candles], [Q4 candles]]}
 # Each quarter contains multiple weekly candlesticks {open, high, low, close}
@@ -247,6 +252,42 @@ func select_stock(ticker: String):
 	if chart and chart.has_method("set_stock_data"):
 		chart.call("set_stock_data", stock_prices[ticker][current_quarter])
 
+func calculate_sma(ticker: String, period: int) -> float:
+	var prices = []
+	for q in range(current_quarter + 1):
+		var candles = stock_prices[ticker][q]
+		prices.append(candles[-1]["close"])
+		
+	if prices.size() < period:
+		return 0.0
+		
+	var sum = 0.0
+	for i in range(period):
+		sum += prices[prices.size() - 1 - i]
+		
+	return sum / period
+
+func calculate_volatility(ticker: String) -> float:
+	var prices = []
+	for q in range(current_quarter + 1):
+		var candles = stock_prices[ticker][q]
+		prices.append(candles[-1]["close"])
+		
+	if prices.size() < 2:
+		return 0.0
+		
+	var mean = 0.0
+	for p in prices:
+		mean += p
+	mean /= prices.size()
+	
+	var variance = 0.0
+	for p in prices:
+		variance += pow(p - mean, 2)
+	variance /= prices.size()
+	
+	return sqrt(variance)
+
 func update_display():
 	var label = find_child("StockPrice", true, false)
 	if label:
@@ -255,6 +296,27 @@ func update_display():
 		var current_price = quarter_candles[-1]["close"]
 		label.set_text("Cash: $%.2f\nPrice: $%.2f | Owned: %d\nQ%d/%d" % [cash, current_price, stocks_owned[current_stock], current_quarter + 1, max_quarters])
 	
+	# Update Data Panel
+	var sma_label = find_child("Value_SMA", true, false)
+	if sma_label:
+		var sma = calculate_sma(current_stock, 3)
+		if sma > 0:
+			sma_label.set_text("$%.2f" % sma)
+		else:
+			sma_label.set_text("N/A")
+			
+	var vol_label = find_child("Value_Vol", true, false)
+	if vol_label:
+		var vol = calculate_volatility(current_stock)
+		vol_label.set_text("%.2f" % vol)
+		
+	var sent_label = find_child("Value_Sent", true, false)
+	if sent_label:
+		if current_quarter < stock_sentiment[current_stock].size():
+			sent_label.set_text("%.2f" % stock_sentiment[current_stock][current_quarter])
+		else:
+			sent_label.set_text("0.50")
+
 	# Update Portfolio View
 	update_portfolio_view()
 
