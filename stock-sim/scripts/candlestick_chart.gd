@@ -90,11 +90,13 @@ func _draw():
 	
 	# Draw border 
 	# Top line
-	draw_line(Vector2(chart_margin, chart_margin), Vector2(chart_margin + chart_width, chart_margin), color_grid, 2.0)
+	draw_line(Vector2(chart_margin + 10, chart_margin), Vector2(chart_margin + chart_width, chart_margin), color_grid, 2.0)
 	# Right line
 	draw_line(Vector2(chart_margin + chart_width, chart_margin), Vector2(chart_margin + chart_width, chart_margin + chart_height), color_grid, 2.0)
+	# Left line
+	#draw_line(Vector2(chart_margin, chart_margin), Vector2(chart_margin, chart_margin + chart_height), color_grid, 2.0)
 	# Bottom line
-	draw_line(Vector2(chart_margin, chart_margin + chart_height), Vector2(chart_margin + chart_width, chart_margin + chart_height), color_grid, 2.0)
+	draw_line(Vector2(chart_margin+10, chart_margin + chart_height), Vector2(chart_margin + chart_width, chart_margin + chart_height), color_grid, 2.0)
 
 func draw_grid(x_offset, y_offset, width, height, min_val, max_val):
 	"""Draw grid lines and price labels"""

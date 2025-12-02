@@ -91,18 +91,6 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 script = ExtResource("2_pw63i")
 
-[node name="X-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/BodyHBox/ChartPanel"]
-position = Vector2(75, 405)
-points = PackedVector2Array(0, 0, 1050, 0)
-width = 2.0
-default_color = Color(0.23529412, 0.23529412, 0.23529412, 1)
-
-[node name="Y-Axis" type="Line2D" parent="GameWindow/TabContainer/Stock View/BodyHBox/ChartPanel"]
-position = Vector2(75, 25)
-points = PackedVector2Array(0, 0, 0, 380)
-width = 2.0
-default_color = Color(0.23392558, 0.2339254, 0.23392552, 1)
-
 [node name="SidebarPanel" type="ScrollContainer" parent="GameWindow/TabContainer/Stock View/BodyHBox"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2

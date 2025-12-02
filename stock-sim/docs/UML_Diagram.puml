@@ -1,0 +1,212 @@
+@startuml Stock Trading Simulator - Class Diagram
+
+' Main Game Controller
+class Game_manager {
+  ' Attributes
+  - cash: float
+  - current_quarter: int
+  - max_quarters: int
+  - current_stock: String
+  - stocks_owned: Dictionary
+  - stock_prices: Dictionary
+  - stock_names: Dictionary
+  - tutorials: Dictionary
+  - tutorial_dialog: AcceptDialog
+  
+  ' Methods
+  + _ready(): void
+  + create_tutorial_dialog(): void
+  + show_tutorial(tutorial_key: String): void
+  + show_tutorial_menu(): void
+  + select_stock(ticker: String): void
+  + update_display(): void
+  + update_portfolio_view(): void
+  + buy_stock(ticker: String, shares: int): void
+  + sell_stock(ticker: String, shares: int): void
+  + show_quantity_dialog(action: String, ticker: String): void
+  + execute_buy(ticker: String, shares: int): void
+  + execute_sell(ticker: String, shares: int): void
+  + hold_stock(): void
+  + advance_quarter(): void
+}
+
+' Candlestick Chart Visualization
+class CandlestickChart {
+  ' Attributes
+  - price_data: Array
+  - chart_margin: int
+  - chart_margin_right: int
+  - candle_width: int
+  - candle_spacing: int
+  - color_up: Color
+  - color_down: Color
+  - color_neutral: Color
+  - color_grid: Color
+  - color_text: Color
+  
+  ' Methods
+  + _ready(): void
+  + set_stock_data(prices: Array): void
+  + _draw(): void
+  + draw_grid(x_offset, y_offset, width, height, min_val, max_val): void
+  + draw_candlestick(x_pos, y_offset, chart_height, candle, previous_candle, min_price, max_price, width, quarter_index): void
+}
+
+' Data Structure - OHLC Candle
+class OHLCCandle <<data structure>> {
+  + open: float
+  + high: float
+  + low: float
+  + close: float
+}
+
+' Stock Data Model
+class StockData <<data structure>> {
+  + ticker: String
+  + company_name: String
+  + quarterly_data: Array<Array<OHLCCandle>>
+  + shares_owned: int
+}
+
+' Portfolio Holdings
+class Portfolio <<data structure>> {
+  + cash: float
+  + holdings: Dictionary<String, int>
+  + starting_cash: float
+  + current_quarter: int
+}
+
+' Tutorial System
+class TutorialSystem <<data structure>> {
+  + tutorial_id: String
+  + title: String
+  + content: String
+}
+
+' Data Parser Utility
+class CSVDataParser {
+  ' Attributes
+  - csv_path: String
+  - data: Array
+  - quarters: Array
+  
+  ' Methods
+  + read_csv(): void
+  + parse_data(): void
+  + calculate_quarterly_ohlc(): Array
+  + generate_godot_format(): String
+}
+
+' UI Components
+class UIComponents <<interface>> {
+  + StockPrice: Label
+  + StockName: Label
+  + StockCode: Label
+  + CashHoldingsValue: Label
+  + StockHoldingsValue: Label
+  + PortfolioValue: Label
+  + QuarterLabel: Label
+}
+
+' Godot Built-in Classes (for reference)
+class AcceptDialog <<Godot>> {
+  + dialog_text: String
+  + ok_button_text: String
+  + title: String
+  + popup_centered(): void
+}
+
+class ConfirmationDialog <<Godot>> {
+  + dialog_text: String
+  + ok_button_text: String
+  + cancel_button_text: String
+  + confirmed: Signal
+  + canceled: Signal
+}
+
+class SpinBox <<Godot>> {
+  + min_value: float
+  + max_value: float
+  + value: float
+  + step: float
+}
+
+class Control <<Godot>> {
+  + _draw(): void
+  + queue_redraw(): void
+  + get_size(): Vector2
+}
+
+class Node2D <<Godot>> {
+  + _ready(): void
+  + find_child(name: String): Node
+  + add_child(node: Node): void
+}
+
+' Relationships
+Game_manager --|> Node2D : extends
+Game_manager *-- Portfolio : manages
+Game_manager *-- "3" StockData : tracks
+Game_manager *-- "5" TutorialSystem : contains
+Game_manager ..> AcceptDialog : uses
+Game_manager ..> ConfirmationDialog : creates
+Game_manager ..> SpinBox : creates
+Game_manager --> CandlestickChart : updates
+
+CandlestickChart --|> Control : extends
+CandlestickChart o-- "12-14" OHLCCandle : displays per quarter
+
+StockData *-- "4" "Array<OHLCCandle>" : contains quarters
+
+CSVDataParser ..> OHLCCandle : generates
+CSVDataParser ..> StockData : populates
+
+Game_manager ..> UIComponents : updates
+
+' Notes
+note right of Game_manager
+  **Main Game Controller**
+  - Manages game state across 4 quarters
+  - Handles all player actions (buy/sell/hold)
+  - Controls tutorial system
+  - Updates UI components
+  - Tracks portfolio value and profit/loss
+end note
+
+note right of CandlestickChart
+  **Chart Visualization**
+  - Renders 12-14 weekly candlesticks per quarter
+  - Shows OHLC data with wicks and bodies
+  - Color-coded: green (up), red (down)
+  - Dynamic scaling based on price range
+  - Grid with price labels
+end note
+
+note right of OHLCCandle
+  **Data Structure**
+  Weekly candlestick data:
+  - open: opening price
+  - high: highest price
+  - low: lowest price
+  - close: closing price
+end note
+
+note left of CSVDataParser
+  **Data Processing Utility**
+  Converts historical CSV data
+  into game-ready format:
+  - Reads 250 days of data
+  - Groups into 50 weekly candles
+  - Splits into 4 quarters
+  - Calculates OHLC aggregates
+end note
+
+note bottom of Portfolio
+  **Game State**
+  - Starting cash: $10,000
+  - Tracks owned shares per stock
+  - Calculates total portfolio value
+  - Win condition: value > $10,000
+end note
+
+@enduml

@@ -1,0 +1,112 @@
+@startuml Stock Trading Simulator - State Diagram
+
+[*] --> GameInitialization : Launch Game
+
+state GameInitialization {
+  [*] --> LoadingData
+  LoadingData --> InitializingPortfolio : Stock data loaded
+  InitializingPortfolio --> InitializingUI : Portfolio created\n(cash = $10,000)
+  InitializingUI --> ShowingTutorial : UI components ready
+  ShowingTutorial --> [*] : Tutorial dismissed
+}
+
+GameInitialization --> Quarter1 : Game ready
+
+state "Active Gameplay" as ActiveGame {
+  state Quarter1 {
+    [*] --> ViewingStocks
+    ViewingStocks --> SelectingStock : Click stock button
+    SelectingStock --> ViewingStocks : Stock changed,\nchart updated
+    ViewingStocks --> BuyingStock : Click Buy
+    ViewingStocks --> SellingStock : Click Sell
+    ViewingStocks --> Holding : Click Hold
+    
+    state BuyingStock {
+      [*] --> EnteringQuantity
+      EnteringQuantity --> ValidatingFunds : Quantity entered
+      ValidatingFunds --> InsufficientFunds : Not enough cash
+      ValidatingFunds --> ExecutingPurchase : Funds available
+      ExecutingPurchase --> [*] : Shares added,\ncash deducted
+      InsufficientFunds --> [*] : Show error message
+    }
+    
+    state SellingStock {
+      [*] --> EnteringQuantity
+      EnteringQuantity --> ValidatingOwnership : Quantity entered
+      ValidatingOwnership --> InsufficientShares : Don't own enough
+      ValidatingOwnership --> ExecutingSale : Shares available
+      ExecutingSale --> [*] : Shares removed,\ncash added
+      InsufficientShares --> [*] : Show error message
+    }
+    
+    state Holding {
+      [*] --> [*] : No action taken
+    }
+    
+    BuyingStock --> ViewingStocks : Transaction complete
+    SellingStock --> ViewingStocks : Transaction complete
+    Holding --> ViewingStocks : Confirmed
+    ViewingStocks --> Quarter2 : Click Next Quarter
+  }
+  
+  state Quarter2 {
+    [*] --> ViewingStocks : Show Q2 prices
+    note right: Same state flow as Q1
+    ViewingStocks --> Quarter3 : Click Next Quarter
+  }
+  
+  state Quarter3 {
+    [*] --> ViewingStocks : Show Q3 prices
+    note right: Same state flow as Q1
+    ViewingStocks --> Quarter4 : Click Next Quarter
+  }
+  
+  state Quarter4 {
+    [*] --> ViewingStocks : Show Q4 prices
+    note right: Same state flow as Q1,\nbut Next Quarter\nleads to game end
+    ViewingStocks --> CalculatingResults : Click Next Quarter
+  }
+}
+
+state CalculatingResults {
+  [*] --> CalculatingPortfolioValue
+  CalculatingPortfolioValue --> EvaluatingPerformance : Total value calculated
+  EvaluatingPerformance --> Victory : value > $10,000
+  EvaluatingPerformance --> Defeat : value <= $10,000
+}
+
+state Victory {
+  [*] --> DisplayingResults : Show profit
+  DisplayingResults --> [*] : Player reviews
+}
+
+state Defeat {
+  [*] --> DisplayingResults : Show loss
+  DisplayingResults --> [*] : Player reviews
+}
+
+Victory --> [*] : Game Over
+Defeat --> [*] : Game Over
+
+note right of Quarter1
+  Each quarter follows same pattern:
+  1. View current stock prices
+  2. Select stock to trade
+  3. Buy/Sell/Hold decision
+  4. Advance to next quarter
+  
+  Prices update between quarters
+  Portfolio value recalculated
+end note
+
+note right of CalculatingResults
+  Final Score Calculation:
+  - Total cash remaining
+  + Value of all holdings
+  = Final portfolio value
+  
+  Win: > $10,000
+  Lose: <= $10,000
+end note
+
+@enduml

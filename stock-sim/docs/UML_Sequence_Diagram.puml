@@ -1,0 +1,165 @@
+@startuml Stock Trading Simulator - Sequence Diagram
+
+actor Player
+participant "Game_manager" as GM
+participant "CandlestickChart" as Chart
+participant "ConfirmationDialog" as Dialog
+participant "Portfolio\n(State)" as Portfolio
+participant "UI Components" as UI
+
+== Game Initialization ==
+Player -> GM: Launch Game
+activate GM
+GM -> GM: _ready()
+GM -> Portfolio: Initialize\n(cash = $10,000)
+activate Portfolio
+GM -> Chart: set_stock_data(AAPL Q1 candles)
+activate Chart
+Chart -> Chart: _draw()
+Chart --> GM: Chart rendered
+deactivate Chart
+GM -> UI: update_display()
+activate UI
+UI --> Player: Show initial state
+deactivate UI
+GM -> GM: show_tutorial("welcome")
+GM --> Player: Display welcome tutorial
+deactivate GM
+
+== Stock Selection ==
+Player -> GM: select_stock("MSFT")
+activate GM
+GM -> GM: current_stock = "MSFT"
+GM -> UI: Update stock labels
+GM -> Chart: set_stock_data(MSFT Q1 candles)
+activate Chart
+Chart -> Chart: queue_redraw()
+Chart --> GM: Chart updated
+deactivate Chart
+GM -> UI: update_display()
+GM --> Player: Display MSFT data
+deactivate GM
+
+== Buy Stock Flow ==
+Player -> GM: Click "Buy" button
+activate GM
+GM -> GM: buy_stock("MSFT")
+GM -> Dialog: Create ConfirmationDialog
+activate Dialog
+GM -> Dialog: Add SpinBox for quantity
+Dialog --> Player: Show dialog\n"How many shares?"
+deactivate Dialog
+
+Player -> Dialog: Enter quantity (5 shares)\nClick "Buy"
+activate Dialog
+Dialog -> GM: confirmed signal\n(shares=5)
+deactivate Dialog
+
+GM -> GM: execute_buy("MSFT", 5)
+GM -> Portfolio: Check can_afford(MSFT, 5)
+activate Portfolio
+Portfolio --> GM: true ($1500 available)
+deactivate Portfolio
+
+GM -> Portfolio: Deduct cash\n(cash -= $1500)
+activate Portfolio
+GM -> Portfolio: Add shares\n(MSFT += 5)
+Portfolio --> GM: Transaction complete
+deactivate Portfolio
+
+GM -> UI: update_display()
+activate UI
+UI --> Player: Show updated\ncash & holdings
+deactivate UI
+
+GM -> UI: update_portfolio_view()
+activate UI
+UI --> Player: Update Portfolio tab
+deactivate UI
+deactivate GM
+
+== Sell Stock Flow ==
+Player -> GM: Click "Sell" button
+activate GM
+GM -> GM: sell_stock("MSFT")
+GM -> Dialog: Create ConfirmationDialog
+activate Dialog
+Dialog --> Player: Show dialog\n"How many shares?"
+deactivate Dialog
+
+Player -> Dialog: Enter quantity (2 shares)\nClick "Sell"
+activate Dialog
+Dialog -> GM: confirmed signal\n(shares=2)
+deactivate Dialog
+
+GM -> GM: execute_sell("MSFT", 2)
+GM -> Portfolio: Check ownership >= 2
+activate Portfolio
+Portfolio --> GM: true (owns 5)
+deactivate Portfolio
+
+GM -> Portfolio: Add cash from sale
+activate Portfolio
+GM -> Portfolio: Remove shares\n(MSFT -= 2)
+Portfolio --> GM: Transaction complete
+deactivate Portfolio
+
+GM -> UI: update_display()
+GM -> UI: update_portfolio_view()
+GM --> Player: Show updated state
+deactivate GM
+
+== Quarter Advancement ==
+Player -> GM: Click "Next Quarter"
+activate GM
+GM -> GM: advance_quarter()
+GM -> Portfolio: current_quarter++
+activate Portfolio
+Portfolio --> GM: Now Q2
+deactivate Portfolio
+
+GM -> Chart: set_stock_data(MSFT Q2 candles)
+activate Chart
+Chart -> Chart: queue_redraw()
+Chart --> GM: Updated chart
+deactivate Chart
+
+GM -> UI: update_display()
+activate UI
+UI --> Player: Show Q2 prices\nand new quarter
+deactivate UI
+
+alt Quarter 2
+    GM -> GM: show_tutorial("quarter_strategy")
+    GM --> Player: Display strategy tips
+end
+
+alt Quarter 4 Complete
+    GM -> Portfolio: Calculate total_value
+    activate Portfolio
+    Portfolio --> GM: cash + holdings value
+    deactivate Portfolio
+    
+    alt total_value > $10,000
+        GM --> Player: "YOU WIN!\nProfit: $X"
+    else total_value <= $10,000
+        GM --> Player: "GAME OVER\nLoss: $X"
+    end
+end
+deactivate GM
+
+== Chart Rendering (Internal) ==
+activate Chart
+Chart -> Chart: _draw()
+Chart -> Chart: Calculate min/max prices
+Chart -> Chart: draw_grid()
+note right: Draw background,\ngrid lines, price labels
+loop For each candlestick
+    Chart -> Chart: draw_candlestick()
+    note right: Draw wick (high/low)\nDraw body (open/close)\nColor based on direction
+end
+Chart -> Chart: Draw 3-sided border
+Chart --> Player: Display updated chart
+deactivate Chart
+
+@enduml

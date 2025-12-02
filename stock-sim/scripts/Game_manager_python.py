@@ -245,9 +245,4 @@ class Game_manager(Node):
 			menu.add_button("Strategy", False, "quarter_strategy")
 			
 			# Connect custom action signal
-			menu.connect("custom_action", self.show_tutorial)
-			
-			self.add_child(menu)
-			menu.popup_centered()
-			print(" Tutorial menu shown")
-		exce
+			menu.connect("custom_action", self.show
