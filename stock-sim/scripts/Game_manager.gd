@@ -504,6 +504,7 @@ func _ready():
 	print("First candle: ", stock_prices["AAPL"][0][0])
 	create_tutorial_dialog()
 	update_display()
+	update_quarter_label()
 	
 	# Initialize chart with current quarter's data
 	var chart = find_child("CandlestickChart", true, false)
@@ -683,6 +684,11 @@ func get_volume(ticker: String) -> String:
 	
 	# Format as string (e.g. 12.5M)
 	return "%.2fM" % (vol / 1000000.0)
+
+func update_quarter_label():
+	var q_label = find_child("QuarterLabel", true, false)
+	if q_label:
+		q_label.text = "Quarter %d of %d" % [current_quarter + 1, max_quarters]	
 
 func update_display():
 	var label = find_child("StockPrice", true, false)
@@ -919,6 +925,7 @@ func advance_quarter():
 	if current_quarter < max_quarters - 1:
 		current_quarter += 1
 		update_display()
+		update_quarter_label()
 		
 		# Update chart with new quarter's candlesticks
 		var chart = find_child("CandlestickChart", true, false)
