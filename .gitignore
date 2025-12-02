@@ -5,3 +5,8 @@ secrets.json
 # Godot
 .godot/
 *.translation
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
