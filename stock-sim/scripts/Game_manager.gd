@@ -577,13 +577,16 @@ func show_performance_review(total_value: float, profit: float):
 	var invested_sum = 0
 	for ticker in total_spent:
 		invested_sum += total_spent[ticker]
-		
-	var eval_percent = ((total_value - invested_sum) / invested_sum) * 100
+	
+	var starting_amount = 10000
+	var return_on_investment = 0 if invested_sum == 0 else (profit / invested_sum) * 100
+	var portfolio_value_change = ((total_value - starting_amount) / starting_amount) * 100
 	
 	var menu_text = "Portfolio Value: %f \n\n" %total_value
 	menu_text += "Profit: %f \n\n" %profit
 	menu_text += "Total Invested: %f \n\n" %invested_sum
-	menu_text += "Performance Evaluation: %f%% \n\n" %eval_percent
+	menu_text += "Return on Investment: %f%% \n\n" %return_on_investment
+	menu_text += "Portfolio Return: %f%% \n\n" %portfolio_value_change
 	
 	menu_dialog.dialog_text = menu_text
 	menu_dialog.ok_button_text = "Try Again"

@@ -361,5 +361,4 @@ class Game_manager(Node):
 			print("=== _update_ui() complete ===")
 		
 		except Exception as e:
-			print(f" ERROR in _
->>>>>>> 1e372b60fb854ba463fabc23fb8015780a393390
+			print(
