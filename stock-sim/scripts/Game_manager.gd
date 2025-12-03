@@ -808,11 +808,12 @@ func update_portfolio_view():
 					avg_price = total_spent[ticker] / stocks_owned[ticker]
 
 				# Add Line Output Text
-				holdings_text += "%s: %d shares ($%.2f)\n  Avg Buy Price: $%.2f\n" % [
+				holdings_text += "%s: %d shares ($%.2f)\n  Avg Buy Price: $%.2f\n  Current Price per Stock: $%.2f\n" % [
 					ticker,
 					stocks_owned[ticker],
 					value,
-					avg_price
+					avg_price,
+					current_price
 				]
 
 		if holdings_text == "":

@@ -1,9 +1,16 @@
 class Portfolio:
 	"""Represent the Player's portfolio (cash + stock holdings).
+<<<<<<< HEAD
 	
 	Attributes:
 		cash (float): Available cash for trading
 		holdings (dict): Dictionary Mapping ticker symbols to number of shares
+=======
+    
+    Attributes:
+        cash (float): Available cash for trading
+        holdings (dict): Dictionary Mapping ticker symbols to number of shares
+>>>>>>> 1e372b60fb854ba463fabc23fb8015780a393390
 		transaction_history (list): List of all transactions """
 
 	def __init__(self, starting_cash=10000):
