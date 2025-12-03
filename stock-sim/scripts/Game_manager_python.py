@@ -242,7 +242,4 @@ class Game_manager(Node):
 			menu.add_button("Trends", False, "sma")
 			menu.add_button("Sentiment", False, "sentiment")
 			menu.add_button("Diversify", False, "diversification")
-			menu.add_button("Strategy", False, "quarter_strategy")
-			
-			# Connect custom action signal
-			menu.connect("custom_action", self.show
+			menu.add_button("Strategy", Fals
