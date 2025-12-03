@@ -585,7 +585,7 @@ func show_performance_review(total_value: float, profit: float):
 	var menu_text = "Portfolio Value: %f \n\n" %total_value
 	menu_text += "Profit: %f \n\n" %profit
 	menu_text += "Total Invested: %f \n\n" %invested_sum
-	menu_text += "Return on Investment: %f%% \n\n" %return_on_investment
+	menu_text += "Return on Invested Capital: %f%% \n\n" %return_on_investment
 	menu_text += "Portfolio Return: %f%% \n\n" %portfolio_value_change
 	
 	menu_dialog.dialog_text = menu_text

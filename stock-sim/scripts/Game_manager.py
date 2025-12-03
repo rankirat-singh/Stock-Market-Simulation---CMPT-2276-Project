@@ -358,7 +358,4 @@ class Game_manager(Node):
 <<<<<<< HEAD
 			print("=== _update_ui() co
 =======
-			print("=== _update_ui() complete ===")
-		
-		except Exception as e:
-			print(
+			print("=== _u
