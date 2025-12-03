@@ -355,9 +355,4 @@ class Game_manager(Node):
 			except Exception as e:
 				print(f"⚠ Error updating Stock View: {e}")
 			
-			print("=== _update_ui() complete ===")
-		
-		except Exception as e:
-			print(f" ERROR in _update_ui(): {e}")
-			import traceback
-			traceback.print_exc()
+			print("=== _update_ui() co

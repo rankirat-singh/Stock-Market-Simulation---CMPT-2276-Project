@@ -568,6 +568,30 @@ func show_tutorial_menu():
 	# Clean up after closing
 	menu_dialog.confirmed.connect(func(): menu_dialog.queue_free())
 	menu_dialog.canceled.connect(func(): menu_dialog.queue_free())
+	
+func show_performance_review(total_value: float, profit: float):
+	"""Show the user's performance"""
+	var menu_dialog = AcceptDialog.new()
+	menu_dialog.title = " Portfolio Performance"
+	
+	var invested_sum = 0
+	for ticker in total_spent:
+		invested_sum += total_spent[ticker]
+		
+	var eval_percent = ((total_value - invested_sum) / invested_sum) * 100
+	
+	var menu_text = "Portfolio Value: %f \n\n" %total_value
+	menu_text += "Profit: %f \n\n" %profit
+	menu_text += "Total Invested: %f \n\n" %invested_sum
+	menu_text += "Performance Evaluation: %f%% \n\n" %eval_percent
+	
+	menu_dialog.dialog_text = menu_text
+	menu_dialog.ok_button_text = "Try Again"
+	menu_dialog.size = Vector2(500, 400)
+	
+	add_child(menu_dialog)
+	menu_dialog.popup_centered()
+	menu_dialog.confirmed.connect(func(): get_tree().reload_current_scene())
 
 func select_stock(ticker: String):
 	"""Switch to viewing a different stock"""
@@ -948,4 +972,5 @@ func advance_quarter():
 				var current_price = quarter_candles[-1]["close"]
 				total_value += stocks_owned[ticker] * current_price
 			var profit = total_value - 10000.0
+			show_performance_review(total_value, profit)
 			label.set_text("GAME OVER!\nFinal Value: $%.2f\nProfit: $%.2f" % [total_value, profit])
